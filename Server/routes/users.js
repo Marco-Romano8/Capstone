@@ -4,8 +4,8 @@ const router = express.Router();
 
 // Import Model
 const userModel = require('../models/users');
-const WorkoutPlan = require('../models/WorkoutPlan'); // Importa il modello WorkoutPlan
-const WorkoutLog = require('../models/WorkoutLog');   // Importa il modello WorkoutLog
+const WorkoutPlan = require('../models/workoutPlan'); // Importa il modello WorkoutPlan
+const WorkoutLog = require('../models/workoutLog');   // Importa il modello WorkoutLog
 
 // Import Middleware
 const authMiddleware = require('../middlewares/authMiddleware');
