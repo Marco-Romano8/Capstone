@@ -73,11 +73,11 @@ router.get('/auth/callback', passport.authenticate('google', { session: false, f
 
         console.log('Our App JWT generated:', ourAppToken);
 
-        res.redirect(`http://localhost:5173/profile?token=${ourAppToken}`);
+        res.redirect(`https://capstone-xi-one.vercel.app/profile?token=${ourAppToken}`);
 
     } catch (error) {
         console.error('Error during Google authentication callback:', error);
-        res.redirect(`http://localhost:5173/login?error=${encodeURIComponent('Errore durante il login con Google. Riprova.')}`);
+        res.redirect(`https://capstone-xi-one.vercel.app/login?error=${encodeURIComponent('Errore durante il login con Google. Riprova.')}`);
     }
 });
 
