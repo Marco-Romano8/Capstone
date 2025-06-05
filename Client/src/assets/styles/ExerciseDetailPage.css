@@ -1,0 +1,90 @@
+.exercise-detail-page-container {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.exercise-detail-title {
+    color: var(--primary-orange);
+    font-weight: 800;
+    font-size: 3rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.exercise-detail-card {
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-background) !important;
+    border: 1px solid var(--border-color-light);
+    overflow: hidden;
+}
+
+.exercise-detail-img {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border-color-light);
+}
+
+.exercise-detail-text {
+    color: var(--text-color-dark);
+    font-size: 1.15rem;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+}
+
+.exercise-detail-text strong {
+    color: var(--primary-orange);
+}
+
+.exercise-description {
+    color: var(--text-color-dark);
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--text-color-light);
+    font-weight: bold;
+    padding: 0.75em 1.5em;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.back-button:hover {
+    background-color: var(--primary-orange-hover);
+    border-color: var(--primary-orange-hover);
+    transform: translateY(-2px);
+}
+
+.back-button:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 767.98px) {
+    .exercise-detail-title {
+        font-size: 2.2rem;
+        text-align: center;
+    }
+
+    .exercise-detail-card .d-flex.flex-column.flex-md-row {
+        flex-direction: column !important;
+    }
+
+    .exercise-detail-card .flex-shrink-0 {
+        margin-right: 0 !important;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .exercise-detail-card .text-md-start {
+        text-align: center !important;
+    }
+
+    .exercise-detail-img {
+        max-width: 100%;
+        height: auto;
+    }
+}

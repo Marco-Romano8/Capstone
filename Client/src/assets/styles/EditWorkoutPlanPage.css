@@ -1,0 +1,319 @@
+.edit-plan-container {
+    background-color: var(--background-color-light);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 3rem auto;
+}
+
+
+.edit-plan-title {
+    color: var(--primary-orange);
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
+    margin-bottom: 2rem;
+}
+
+.edit-plan-buttons-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.btn-back-to-profile {
+    background-color: transparent;
+    border: 2px solid var(--primary-orange);
+    color: var(--primary-orange);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-back-to-profile:hover {
+    background-color: var(--primary-orange);
+    color: var(--text-color-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-save-plan {
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--text-color-light);
+    font-weight: 700;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-save-plan:hover:not(:disabled) {
+    background-color: var(--primary-orange-hover);
+    border-color: var(--primary-orange-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-save-plan:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+}
+
+.exercises-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-background);
+    padding: 1.5rem;
+}
+
+.exercises-card .card-header {
+    background-color: transparent;
+    border-bottom: 2px solid var(--primary-orange);
+    color: var(--primary-orange); 
+    font-weight: 700;
+    font-size: 1.8rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.exercises-card .card-body {
+    padding: 0;
+}
+
+.exercises-card .alert {
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    font-size: 1rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.exercises-card .alert-info {
+    background-color: #f0f8ff; 
+    color: #0d6efd;
+    border-color: #b0e0e6;
+}
+
+.exercise-list-item {
+    background-color: var(--list-item-background);
+    border: 1px solid var(--list-item-border);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    padding: 1.2rem 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease-in-out;
+}
+
+.exercise-list-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: var(--list-item-hover-background);
+}
+
+.exercise-list-item h5 {
+    color: var(--text-color-dark);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.exercise-list-item p small {
+    color: var(--text-color-muted);
+    font-size: 0.85rem;
+}
+
+.exercise-list-item .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.exercise-list-item .form-label {
+    color: var(--text-color-dark);
+    font-weight: 500;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.exercise-list-item .form-control {
+    width: 80px !important;
+    border: 1px solid var(--border-color-medium);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    background-color: var(--input-background);
+    color: var(--text-color-dark);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.exercise-list-item .form-control:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 0.2rem rgba(var(--primary-orange-rgb), 0.25);
+    background-color: var(--input-background-focus);
+    outline: none;
+}
+
+.btn-remove-exercise {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: var(--text-color-light);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-remove-exercise:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.15);
+}
+
+.btn-add-exercise {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: var(--text-color-light);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 1.5rem;
+}
+
+.btn-add-exercise:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.edit-plan-container .spinner-border {
+    color: var(--primary-orange) !important;
+}
+
+.edit-plan-container > .alert {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    font-size: 1.1rem;
+    padding: 1.5rem;
+}
+
+.edit-plan-container > .alert .btn {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.edit-plan-container > .alert .btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+}
+.edit-plan-container > .alert .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.edit-plan-container > .alert .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+}
+.edit-plan-container > .alert .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .edit-plan-container {
+        padding: 1.5rem;
+        margin: 2rem auto;
+    }
+
+    .edit-plan-title {
+        font-size: 2rem;
+    }
+
+    .edit-plan-buttons-top {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .btn-back-to-profile,
+    .btn-save-plan {
+        width: 100%;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.95rem;
+    }
+
+    .exercises-card {
+        padding: 1rem;
+    }
+
+    .exercises-card .card-header {
+        font-size: 1.5rem;
+        padding-bottom: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .exercise-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+    }
+
+    .exercise-list-item .flex-grow-1 {
+        width: 100%;
+        margin-bottom: 0.75rem;
+    }
+
+    .exercise-list-item h5 {
+        font-size: 1.2rem;
+    }
+
+    .exercise-list-item .row {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .exercise-list-item .col-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .exercise-list-item .col-12.text-end {
+        text-align: left !important;
+        margin-top: 1rem;
+    }
+
+    .btn-add-exercise {
+        width: 100%;
+        padding: 0.6rem 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .edit-plan-title {
+        font-size: 1.8rem;
+    }
+    .exercise-list-item .col-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .exercise-list-item .form-group {
+        margin-bottom: 0.5rem;
+    }
+}

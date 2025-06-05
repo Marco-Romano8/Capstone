@@ -1,0 +1,39 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+:root {
+    --primary-orange: #ff6600;
+    --primary-orange-hover: #e65c00;
+    --dark-background: #1a1a1a;
+    --card-background: #ffffff;
+    --text-color-dark: #333333;
+    --text-color-light: #f8f9fa;
+    --text-color-muted: #6c757d;
+    --border-color-light: #e0e0e0;
+    --border-color-dark: #555555;
+    --page-background-light: #f4f7f6;
+    --input-background: #F8F8F8;
+    --input-border: #CCCCCC;
+    --bs-primary: var(--primary-orange);
+    --bs-primary-rgb: 255, 102, 0;
+    --bs-link-color: var(--primary-orange);
+    --bs-link-hover-color: var(--primary-orange-hover);
+}
+
+body {
+    background-color: var(--page-background-light);
+    color: var(--text-color-dark);
+}
+
+.navbar {
+    background-color: var(--dark-background) !important;
+    border-bottom: 1px solid var(--border-color-dark);
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: var(--text-color-light) !important;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--primary-orange) !important;
+}

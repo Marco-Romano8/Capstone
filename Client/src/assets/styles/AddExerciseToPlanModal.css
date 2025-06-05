@@ -1,0 +1,199 @@
+.add-exercise-modal .modal-header {
+    background-color: var(--card-background);
+    border-bottom: 2px solid var(--primary-orange);
+    padding: 1.5rem;
+}
+
+.add-exercise-modal .modal-title {
+    color: var(--primary-orange);
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.add-exercise-modal .modal-body {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+}
+
+.add-exercise-modal .modal-footer {
+    background-color: var(--card-background);
+    border-top: 1px solid var(--border-color-light);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.add-exercise-modal .form-control {
+    border-color: var(--border-color-medium);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background-color: var(--input-background);
+    color: var(--text-color-dark);
+}
+
+.add-exercise-modal .form-control:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 0.2rem rgba(255, 165, 0, 0.25);
+    background-color: var(--input-background-focus);
+}
+
+.add-exercise-modal .list-group {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color-light);
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.add-exercise-modal .list-group-item {
+    background-color: var(--list-item-background);
+    color: var(--text-color-dark);
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.add-exercise-modal .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.add-exercise-modal .list-group-item.action:hover {
+    background-color: var(--list-item-hover-background);
+    cursor: pointer;
+}
+
+.add-exercise-modal .list-group-item.active {
+    background-color: var(--primary-orange) !important;
+    border-color: var(--primary-orange) !important;
+    color: var(--text-color-light) !important;
+    font-weight: 600;
+}
+
+.add-exercise-modal .list-group-item.active .text-muted {
+    color: rgba(255, 255, 255, 0.7) !important; 
+}
+
+.add-exercise-modal .selected-exercise-card {
+    border: 1px solid var(--border-color-medium);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: var(--card-background-light);
+    padding: 1.5rem;
+}
+
+.add-exercise-modal .selected-exercise-card .card-title {
+    color: var(--primary-orange);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.add-exercise-modal .selected-exercise-card .card-text {
+    color: var(--text-color-dark);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.add-exercise-modal .selected-exercise-card .form-label {
+    color: var(--text-color-dark);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.add-exercise-modal .selected-exercise-card .form-control {
+    text-align: center;
+    width: 100%;
+}
+
+.add-exercise-modal .btn-secondary {
+    background-color: var(--button-secondary-background);
+    border-color: var(--button-secondary-background);
+    color: var(--button-secondary-text);
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.add-exercise-modal .btn-secondary:hover {
+    background-color: var(--button-secondary-hover);
+    border-color: var(--button-secondary-hover);
+    transform: translateY(-1px);
+}
+
+.add-exercise-modal .btn-primary {
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--text-color-light);
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.add-exercise-modal .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-orange-hover);
+    border-color: var(--primary-orange-hover);
+    transform: translateY(-1px);
+}
+
+.add-exercise-modal .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.add-exercise-modal .list-group::-webkit-scrollbar {
+    width: 8px;
+}
+
+.add-exercise-modal .list-group::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.add-exercise-modal .list-group::-webkit-scrollbar-thumb {
+    background: var(--primary-orange);
+    border-radius: 10px;
+}
+
+.add-exercise-modal .list-group::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-orange-hover);
+}
+
+.add-exercise-modal .bi-check-circle-fill {
+    color: var(--primary-orange);
+}
+.add-exercise-modal .list-group-item.active .bi-check-circle-fill {
+    color: var(--text-color-light);
+}
+
+
+@media (max-width: 768px) {
+    .add-exercise-modal .modal-content {
+        margin: 1rem;
+    }
+    .add-exercise-modal .modal-header,
+    .add-exercise-modal .modal-body,
+    .add-exercise-modal .modal-footer {
+        padding: 1rem;
+    }
+    .add-exercise-modal .modal-title {
+        font-size: 1.5rem;
+    }
+    .add-exercise-modal .selected-exercise-card .row > div {
+        margin-bottom: 1rem;
+    }
+    .add-exercise-modal .selected-exercise-card .form-label {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+    .add-exercise-modal .modal-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .add-exercise-modal .modal-footer .btn {
+        width: 100%;
+    }
+}

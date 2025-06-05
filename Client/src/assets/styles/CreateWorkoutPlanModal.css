@@ -1,0 +1,133 @@
+.create-plan-modal .modal-content {
+    border-radius: 12px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color-light);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    color: var(--text-color-dark);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.create-plan-modal .modal-header {
+    border-bottom: 1px solid var(--border-color-light);
+    padding: 1.25rem 1.75rem;
+    background-color: var(--card-background);
+}
+
+.create-plan-modal .modal-title {
+    color: var(--primary-orange); 
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+}
+
+.create-plan-modal .modal-body {
+    padding: 1.75rem;
+    background-color: var(--card-background);
+}
+
+.create-plan-modal .form-label {
+    color: var(--text-color-dark) !important; 
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.create-plan-modal .form-control {
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    background-color: white !important;
+    color: var(--text-color-dark) !important; 
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.create-plan-modal .form-control::placeholder {
+    color: var(--text-color-muted) !important; 
+    opacity: 1; 
+}
+
+.create-plan-modal .form-control:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+    background-color: white !important; 
+    outline: none;
+}
+
+.create-plan-modal .btn-primary {
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+    color: var(--text-color-light);
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    width: 100%;
+    margin-top: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.create-plan-modal .btn-primary:hover:not(:disabled) {
+    background-color: var(--primary-orange-hover);
+    border-color: var(--primary-orange-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.create-plan-modal .btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.create-plan-modal .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--primary-orange);
+    border-color: var(--primary-orange);
+}
+
+.create-plan-modal .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.create-plan-modal .btn-close {
+    color: var(--text-color-dark) !important;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.create-plan-modal .btn-close:hover {
+    color: var(--primary-orange) !important;
+    opacity: 1;
+}
+
+@media (max-width: 576px) {
+    .create-plan-modal .modal-content {
+        margin: 1rem;
+    }
+
+    .create-plan-modal .modal-header,
+    .create-plan-modal .modal-body {
+        padding: 1rem;
+    }
+
+    .create-plan-modal .modal-title {
+        font-size: 1.25rem;
+    }
+
+    .create-plan-modal .form-control {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .create-plan-modal .btn-primary {
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+    }
+}

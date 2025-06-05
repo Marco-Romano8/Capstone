@@ -1,0 +1,180 @@
+.workout-log-details-page-container {
+    padding: 2rem 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.workout-log-details-page-container .btn-outline-primary {
+    border-color: #ff6600 !important;
+    color: #ff6600 !important;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.workout-log-details-page-container .btn-outline-primary:hover {
+    background-color: #ff6600 !important;
+    color: white !important;
+    border-color: #ff6600 !important;
+}
+
+.workout-log-details-page-container .btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #343a40;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.workout-log-details-page-container .btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: white;
+}
+
+.workout-log-details-page-container .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.workout-log-details-page-container .btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.workout-log-details-page-container h1 {
+    color: #ff6600;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+}
+
+.workout-log-details-page-container .text-muted {
+    color: #adb5bd !important;
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+}
+
+.exercise-log-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background-color: #2c2c2c !important;
+    color: white;
+    padding: 1rem;
+}
+
+.exercise-log-card .card-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #ff6600;
+    margin-bottom: 1rem;
+}
+
+.workout-log-exercise-item {
+    background-color: #383838 !important;
+    color: #f8f9fa !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2) !important;
+    padding: 1rem 1.25rem;
+    border-radius: 0;
+}
+
+.workout-log-exercise-item:first-child {
+    border-top: none !important;
+}
+
+.workout-log-exercise-item h5 {
+    color: #ff6600;
+    margin-bottom: 0.5rem;
+}
+
+.workout-log-exercise-item .text-muted {
+    font-size: 0.85rem;
+    color: #adb5bd !important;
+}
+
+.workout-log-sets-list {
+    margin-top: 0.75rem;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #2a2a2a;
+}
+
+.workout-log-set-item {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+}
+
+.workout-log-set-item:last-child {
+    border-bottom: none;
+}
+
+.workout-log-details-page-container .alert {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #343a40;
+    font-weight: 500;
+}
+
+.workout-log-details-page-container .alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.workout-log-details-page-container .alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.modal-content {
+    background-color: #343a40 !important;
+    color: white;
+    border-radius: 15px;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid #495057 !important;
+}
+
+.modal-title {
+    color: #ff6600 !important;
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: 1px solid #495057 !important;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.modal-footer .btn-primary {
+    background-color: #ff6600;
+    border-color: #ff6600;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: #e65c00;
+    border-color: #e65c00;
+    color: white;
+}

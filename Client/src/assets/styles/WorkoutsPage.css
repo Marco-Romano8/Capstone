@@ -1,0 +1,97 @@
+.workouts-page-container {
+    padding: 2rem 1rem;
+}
+
+.workouts-page-title {
+    color: var(--primary-orange);
+    font-weight: 700;
+    font-size: 2.8rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+}
+
+.search-input {
+    border-radius: 8px;
+    border: 1px solid var(--border-color-light);
+    padding: 0.75rem 1rem;
+    color: var(--text-color-dark);
+    background-color: var(--card-background);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.search-input:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+    background-color: var(--card-background);
+}
+
+.filter-dropdown .btn {
+    border-radius: 8px;
+    border: 1px solid var(--primary-orange);
+    color: var(--primary-orange);
+    background-color: transparent;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.filter-dropdown .btn:hover,
+.filter-dropdown .btn:focus {
+    background-color: var(--primary-orange) !important;
+    color: var(--text-color-light) !important;
+    border-color: var(--primary-orange) !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+}
+
+.filter-dropdown .dropdown-menu {
+    border-radius: 8px;
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color-light);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.filter-dropdown-item {
+    color: var(--text-color-dark);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filter-dropdown-item:hover,
+.filter-dropdown-item.active {
+    background-color: var(--primary-orange) !important;
+    color: var(--text-color-light) !important;
+}
+
+.spinner-border {
+    color: var(--primary-orange) !important;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+.alert.bg-white {
+    background-color: var(--card-background) !important;
+    color: var(--text-color-dark) !important;
+    border: 1px solid var(--border-color-light);
+}
+
+.alert-info.text-center {
+    background-color: #e2f4f8;
+    color: #333;
+    border-color: #cce7ed;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
