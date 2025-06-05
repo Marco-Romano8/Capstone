@@ -41,7 +41,7 @@ export default function WorkoutLogDetailsPage() {
         }
 
         try {
-            await axios.delete(`http://localhost:3001/api/workoutlogs/${id}`, {
+            await axios.delete(`https://capstone-skmb.onrender.com/api/workoutlogs/${id}`, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
             showSuccessMessage('Log di allenamento eliminato con successo!');
@@ -94,7 +94,7 @@ export default function WorkoutLogDetailsPage() {
                 }))
             };
 
-            await axios.put(`http://localhost:3001/api/workoutlogs/${id}`, payload, {
+            await axios.put(`https://capstone-skmb.onrender.com/api/workoutlogs/${id}`, payload, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
             setWorkoutLog(editLogData);
@@ -120,7 +120,7 @@ export default function WorkoutLogDetailsPage() {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await axios.get(`http://localhost:3001/api/workoutlogs/${id}`, {
+                const response = await axios.get(`https://capstone-skmb.onrender.com/api/workoutlogs/${id}`, {
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setWorkoutLog(response.data);

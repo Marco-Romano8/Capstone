@@ -28,7 +28,7 @@ export default function RunWorkoutPage() {
             }
 
             try {
-                const response = await axios.get(`http://localhost:3001/api/workoutplans/${id}`, {
+                const response = await axios.get(`https://capstone-skmb.onrender.com/api/workoutplans/${id}`, {
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setWorkoutPlan(response.data);
@@ -136,7 +136,7 @@ export default function RunWorkoutPage() {
                 exercisesPerformed: exercisesToLog
             };
 
-            await axios.post('http://localhost:3001/api/workoutlogs', payload, {
+            await axios.post('https://capstone-skmb.onrender.com/api/workoutlogs', payload, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
 

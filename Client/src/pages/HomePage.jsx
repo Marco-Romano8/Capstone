@@ -17,7 +17,7 @@ export default function HomePage() {
             if (userLogin) {
                 setIsLoggedIn(true);
                 try {
-                    const response = await axios.get('http://localhost:3001/api/dashboard-summary', {
+                    const response = await axios.get('https://capstone-skmb.onrender.com/api/dashboard-summary', {
                         headers: {
                             Authorization: `Bearer ${userLogin}`,
                         },

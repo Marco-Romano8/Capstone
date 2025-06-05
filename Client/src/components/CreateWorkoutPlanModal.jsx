@@ -22,7 +22,7 @@ export default function CreateWorkoutPlanModal({ show, handleClose, onPlanCreate
 
         try {
             const response = await axios.post(
-                'http://localhost:3001/api/workoutplans',
+                'https://capstone-skmb.onrender.com/api/workoutplans',
                 { name: planName, exercises: [] },
                 {
                     headers: {

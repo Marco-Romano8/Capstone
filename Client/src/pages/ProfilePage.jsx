@@ -65,7 +65,7 @@ export default function ProfilePage() {
             setPlansError(null);
 
             try {
-                const response = await axios.get('http://localhost:3001/api/workoutplans', {
+                const response = await axios.get('https://capstone-skmb.onrender.com/api/workoutplans', {
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setWorkoutPlans(response.data);
@@ -115,7 +115,7 @@ export default function ProfilePage() {
             return;
         }
         try {
-            await axios.delete(`http://localhost:3001/api/workoutplans/${planId}`, {
+            await axios.delete(`https://capstone-skmb.onrender.com/api/workoutplans/${planId}`, {
                 headers: { Authorization: `Bearer ${userLogin}` },
             });
             setWorkoutPlans((prevPlans) => prevPlans.filter((plan) => plan._id !== planId));

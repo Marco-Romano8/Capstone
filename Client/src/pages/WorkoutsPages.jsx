@@ -17,7 +17,7 @@ export default function WorkoutsPage() {
     useEffect(() => {
         const fetchExercises = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/exercises');
+                const response = await axios.get('https://capstone-skmb.onrender.com/api/exercises');
                 setExercises(response.data);
                 setLoading(false);
 

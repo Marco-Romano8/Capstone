@@ -32,7 +32,7 @@ export default function EditWorkoutPlanPage() {
             setLoading(true);
             setError(null);
             try {
-                const response = await axios.get(`http://localhost:3001/api/workoutplans/${id}`, {
+                const response = await axios.get(`https://capstone-skmb.onrender.com/api/workoutplans/${id}`, {
                     headers: {
                         Authorization: `Bearer ${userLogin}`,
                     },
@@ -129,7 +129,7 @@ export default function EditWorkoutPlanPage() {
                 kg: item.kg
             }));
 
-            await axios.put(`http://localhost:3001/api/workoutplans/${workoutPlan._id}`, {
+            await axios.put(`https://capstone-skmb.onrender.com/api/workoutplans/${workoutPlan._id}`, {
                 name: workoutPlan.name,
                 exercises: exercisesToSend
             }, {

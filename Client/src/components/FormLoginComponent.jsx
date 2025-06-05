@@ -19,7 +19,7 @@ export default function FormLoginComponent() {
   }
 
   const formSubmitHandler = () => {
-    axios.post('http://localhost:3001/auth/login', user)
+    axios.post('https://capstone-skmb.onrender.com/auth/login', user)
       .then(response => {
         setError(null);
         localStorage.setItem('userLogin', response.data)
@@ -41,7 +41,7 @@ export default function FormLoginComponent() {
       </Form.Group>
       {error ? <Alert variant={'danger'} className="mt-3"> {error.message} </Alert> : ''}
       <Form.Group className="mb-3" controlId="googleLoginButton">
-        <Button variant="primary" type="button" className='w-100 btn-orange-filled' href='http://localhost:3001/auth/googleLogin'>
+        <Button variant="primary" type="button" className='w-100 btn-orange-filled' href='https://capstone-skmb.onrender.com/auth/googleLogin'>
           <img src={GoogleWhiteIcon} alt="Google icon" style={{ width: '16px', height: '16px', marginRight: '8px' }} />
           Google Login
         </Button>

@@ -32,7 +32,7 @@ export default function WorkoutLogsPage() {
                 setLoadingLogs(true);
                 setLogsError(null);
 
-                const response = await axios.get('http://localhost:3001/api/workoutlogs', {
+                const response = await axios.get('https://capstone-skmb.onrender.com/api/workoutlogs', {
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setWorkoutLogs(response.data);

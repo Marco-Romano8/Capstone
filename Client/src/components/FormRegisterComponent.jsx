@@ -18,7 +18,7 @@ export default function FormRegisterComponent() {
   };
 
   const formSubmitHandler = () => {
-    axios.post('http://localhost:3001/auth/register', user)
+    axios.post('https://capstone-skmb.onrender.com/auth/register', user)
       .then(response => {
         console.log(response);
         setError(null);

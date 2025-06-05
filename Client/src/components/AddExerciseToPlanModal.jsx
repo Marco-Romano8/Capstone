@@ -20,7 +20,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
             setError(null);
             const userLogin = localStorage.getItem("userLogin");
             try {
-                const response = await axios.get('http://localhost:3001/api/exercises', {
+                const response = await axios.get('https://capstone-skmb.onrender.com/api/exercises', {
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setAllExercises(response.data);

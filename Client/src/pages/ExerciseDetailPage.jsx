@@ -15,7 +15,7 @@ export default function ExerciseDetailPage() {
         const fetchExercise = async () => {
             try {
                 // Fai la richiesta GET al tuo backend usando l'ID
-                const response = await axios.get(`http://localhost:3001/api/exercises/${id}`);
+                const response = await axios.get(`https://capstone-skmb.onrender.com/api/exercises/${id}`);
                 setExercise(response.data);
                 setLoading(false);
             } catch (err) {
