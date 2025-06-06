@@ -61,7 +61,7 @@ export default function ProfilePage() {
     // Effetto per recuperare le schede di allenamento dell'utente
     useEffect(() => {
         const fetchWorkoutPlans = async () => {
-            const userLogin = localStorage.getLogger("userLogin");
+            const userLogin = localStorage.getItem("userLogin");
             if (!userLogin) { setLoadingPlans(false); return; }
 
             setLoadingPlans(true);
