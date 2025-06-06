@@ -29,10 +29,13 @@ export default function ProfilePage() {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const tokenFromUrl = params.get('token');
+
         if (tokenFromUrl) {
             localStorage.setItem('userLogin', tokenFromUrl);
             console.log('Token da URL salvato nel localStorage per la ProfilePage.');
-            navigate('/profile');
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.delete('token');
+            window.history.replaceState({}, document.title, newUrl.toString());
         }
 
         let userLogin = localStorage.getItem("userLogin");
@@ -58,7 +61,7 @@ export default function ProfilePage() {
     // Effetto per recuperare le schede di allenamento dell'utente
     useEffect(() => {
         const fetchWorkoutPlans = async () => {
-            const userLogin = localStorage.getItem("userLogin");
+            const userLogin = localStorage.getLogger("userLogin");
             if (!userLogin) { setLoadingPlans(false); return; }
 
             setLoadingPlans(true);
