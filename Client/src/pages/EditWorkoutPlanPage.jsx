@@ -260,6 +260,17 @@ export default function EditWorkoutPlanPage() {
                                                     />
                                                 </Form.Group>
                                             </Col>
+                                            <Col xs={12} className="mt-2">
+                                                <Form.Group controlId={`rest-${item.exercise._id}`} className="mb-0 form-group">
+                                                    <Form.Label className="me-2">Recupero (sec):</Form.Label>
+                                                    <FormControl
+                                                        type="number"
+                                                        min="0"
+                                                        value={item.restTimeSeconds}
+                                                        onChange={(e) => handleUpdateExerciseDetail(item.exercise._id, 'restTimeSeconds', parseInt(e.target.value) || 0)}
+                                                    />
+                                                </Form.Group>
+                                            </Col>
                                             <Col xs={12} className="text-end mt-2">
                                                 <Button variant="outline-danger" size="sm" onClick={() => handleRemoveExercise(item.exercise._id)} className="btn-remove-exercise"> 
                                                     <i className="bi bi-trash"></i> Rimuovi
