@@ -190,7 +190,10 @@ export default function RunWorkoutPage() {
                     workoutPlan.exercises.map((ex) => (
                         <Card key={ex.exercise._id} className="mb-4">
                             <Card.Body>
-                                <Card.Title>{ex.exercise.name} <small className="text-muted">({ex.exercise.targetMuscle})</small></Card.Title>
+                                <Card.Title>
+                                    {ex.exercise.name} <small className="text-muted">({ex.exercise.targetMuscle})</small>
+                                    {ex.restTimeSeconds && <span className="ms-3 badge bg-info">Recupero: {ex.restTimeSeconds}s</span>}
+                                </Card.Title>
                                 {currentLogs[ex.exercise._id]?.map((set, index) => (
                                     <Row key={set.setNumber} className="align-items-center mb-2">
                                         <Col xs={1}>Set {set.setNumber}</Col>
