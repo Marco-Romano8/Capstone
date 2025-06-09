@@ -13,6 +13,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
     const [sets, setSets] = useState(3);
     const [reps, setReps] = useState(10);
     const [kg, setKg] = useState(0);
+    const [restTimeSeconds, setRestTimeSeconds] = useState(60);
 
     useEffect(() => {
         const fetchAllExercises = async () => {
@@ -39,6 +40,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
             setSets(3);
             setReps(10);
             setKg(0);
+            setRestTimeSeconds(60);
             setSearchTerm('');
         }
     }, [show]);
@@ -57,28 +59,32 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
         setSets(3);
         setReps(10);
         setKg(0);
+        setRestTimeSeconds(60);
     };
 
     const handleAddSelectedExercise = () => {
         const parsedSets = parseInt(sets);
         const parsedReps = parseInt(reps);
         const parsedKg = parseFloat(kg);
+        const parsedRestTime = parseInt(restTimeSeconds);
 
-        if (selectedExercise && parsedSets > 0 && parsedReps > 0 && !isNaN(parsedKg)) {
+        if (selectedExercise && parsedSets > 0 && parsedReps > 0 && !isNaN(parsedKg) && parsedRestTime >= 0) {
             onAddExercise({
                 exercise: selectedExercise,
                 sets: parsedSets,
                 reps: parsedReps,
-                kg: parsedKg
+                kg: parsedKg,
+                restTimeSeconds: parsedRestTime
             });
             setSelectedExercise(null);
             setSets(3);
             setReps(10);
             setKg(0);
+            setRestTimeSeconds(60);
             setSearchTerm('');
             handleClose();
         } else {
-            alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere maggiori di 0) e kg.');
+            alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere maggiori di 0), kg e tempo di recupero (non negativo).');
         }
     };
 
@@ -167,6 +173,16 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                                     />
                                 </Col>
                             </Row>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Tempo di Recupero (secondi):</Form.Label>
+                                <FormControl
+                                    type="number"
+                                    min="0"
+                                    value={restTimeSeconds}
+                                    onChange={(e) => setRestTimeSeconds(parseInt(e.target.value) || 0)}
+                                    required
+                                />
+                            </Form.Group>
                         </Card.Body>
                     </Card>
                 )}
