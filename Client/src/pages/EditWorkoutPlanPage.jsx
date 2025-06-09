@@ -260,7 +260,7 @@ export default function EditWorkoutPlanPage() {
                                                     />
                                                 </Form.Group>
                                             </Col>
-                                            <Col xs={12} className="mt-2">
+                                            <Col xs={4} className="mt-2">
                                                 <Form.Group controlId={`rest-${item.exercise._id}`} className="mb-0 form-group">
                                                     <Form.Label className="me-2">Recupero (sec):</Form.Label>
                                                     <FormControl
