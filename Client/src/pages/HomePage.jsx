@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import HeaderComponent from '../components/HeaderComponent';
-import { Container, Card, Button, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { Container, Card, Button, Row, Col, Spinner, Alert, Carousel } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../assets/styles/HomePage.css';
@@ -34,7 +34,6 @@ export default function HomePage() {
             }
             setLoading(false);
         };
-
         fetchUserData();
     }, []);
 
@@ -73,60 +72,58 @@ export default function HomePage() {
         return (
             <>
                 <HeaderComponent />
-                <div className="home-page-container">
+                <div className="home-page-container logged-in">
                     <h1 className="welcome-title">
                         Benvenuto, {userData?.username || 'Utente'}!
                     </h1>
-
                     <p className="home-page-intro">
                         Il tuo diario fitness personale. Inizia ad allenarti, monitora i tuoi progressi e raggiungi i tuoi obiettivi.
                     </p>
-
                     {error && (
                         <Alert variant="warning" className="w-100 text-center mb-4">
                             Attenzione: {error}
                         </Alert>
                     )}
-
-                    <Row className="home-stats-row">
-                        <Col md={4} className="mb-4">
-                            <Card className="home-stat-card">
-                                <Card.Body className="text-center">
-                                    <h3 className="card-title-orange">Schede Create</h3>
-                                    <p className="stat-number">{userData?.totalPlans || 0}</p>
-                                    <Link to="/profile" className="btn-custom-secondary">
-                                        <i className="bi bi-journal-album"></i> Le Tue Schede
-                                    </Link>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={4} className="mb-4">
-                            <Card className="home-stat-card">
-                                <Card.Body className="text-center">
-                                    <h3 className="card-title-orange">Allenamenti Registrati</h3>
-                                    <p className="stat-number">{userData?.totalWorkouts || 0}</p>
-                                    <Link to="/workout-logs" className="btn-custom-secondary">
-                                        <i className="bi bi-clipboard-check"></i> I Tuoi Log
-                                    </Link>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={4} className="mb-4">
-                            <Card className="home-stat-card">
-                                <Card.Body className="text-center">
-                                    <h3 className="card-title-orange">Ultimo Allenamento</h3>
-                                    <p className="stat-text">{userData?.lastWorkoutDate ? new Date(userData.lastWorkoutDate).toLocaleDateString() : 'Nessuno'}</p>
-                                    <p className="stat-text-small">{userData?.lastWorkoutName || 'Inizia ora!'}</p>
-                                    {userData?.lastWorkoutId && (
-                                        <Link to={`/workout-logs/${userData.lastWorkoutId}`} className="btn-custom-secondary mt-2">
-                                            <i className="bi bi-eye"></i> Vedi Dettagli
+                    <div className="home-stats-carousel-wrapper">
+                        <Carousel indicators={false} controls={false} interval={5000} className="home-stats-carousel">
+                            <Carousel.Item>
+                                <Card className="home-stat-card">
+                                    <Card.Body className="text-center">
+                                        <h3 className="card-title-orange">Schede Create</h3>
+                                        <p className="stat-number">{userData?.totalPlans || 0}</p>
+                                        <Link to="/profile" className="btn-custom-secondary">
+                                            <i className="bi bi-journal-album"></i> Le Tue Schede
                                         </Link>
-                                    )}
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <Card className="home-stat-card">
+                                    <Card.Body className="text-center">
+                                        <h3 className="card-title-orange">Allenamenti Registrati</h3>
+                                        <p className="stat-number">{userData?.totalWorkouts || 0}</p>
+                                        <Link to="/workout-logs" className="btn-custom-secondary">
+                                            <i className="bi bi-clipboard-check"></i> I Tuoi Log
+                                        </Link>
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                            <Carousel.Item>
+                                <Card className="home-stat-card">
+                                    <Card.Body className="text-center">
+                                        <h3 className="card-title-orange">Ultimo Allenamento</h3>
+                                        <p className="stat-text">{userData?.lastWorkoutDate ? new Date(userData.lastWorkoutDate).toLocaleDateString() : 'Nessuno'}</p>
+                                        <p className="stat-text-small">{userData?.lastWorkoutName || 'Inizia ora!'}</p>
+                                        {userData?.lastWorkoutId && (
+                                            <Link to={`/workout-logs/${userData.lastWorkoutId}`} className="btn-custom-secondary mt-2">
+                                                <i className="bi bi-eye"></i> Vedi Dettagli
+                                            </Link>
+                                        )}
+                                    </Card.Body>
+                                </Card>
+                            </Carousel.Item>
+                        </Carousel>
+                    </div>
                     <div className="home-cta-section">
                         <h2 className="cta-heading">Pronto per il tuo prossimo allenamento?</h2>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -150,12 +147,10 @@ export default function HomePage() {
                 <h1 className="welcome-title">
                     Fitness Diary
                 </h1>
-
                 <p className="home-page-intro">
                     Il tuo compagno ideale per monitorare i progressi fitness.
                     Crea schede di allenamento personalizzate, registra i tuoi esercizi e visualizza i tuoi miglioramenti nel tempo!
                 </p>
-
                 <div className="home-cta-section dark-background-section">
                     <h2 className="cta-heading">Inizia il tuo percorso fitness oggi!</h2>
                     <div className="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -167,7 +162,6 @@ export default function HomePage() {
                         </Link>
                     </div>
                 </div>
-
                 <Row className="home-features-row my-5">
                     <Col md={4} className="mb-4">
                         <Card className="home-feature-card">
