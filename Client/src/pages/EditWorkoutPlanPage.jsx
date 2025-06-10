@@ -15,9 +15,7 @@ export default function EditWorkoutPlanPage() {
     const [isSaving, setIsSaving] = useState(false);
 
     const currentPlanExerciseIds = useMemo(() => {
-        if (!workoutPlan || !workoutPlan.exercises) {
-            return [];
-        }
+        if (!workoutPlan || !workoutPlan.exercises) return [];
         return workoutPlan.exercises.map(item => item.exercise._id);
     }, [workoutPlan]);
 
@@ -33,15 +31,14 @@ export default function EditWorkoutPlanPage() {
             setError(null);
             try {
                 const response = await axios.get(`https://capstone-skmb.onrender.com/api/workoutplans/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${userLogin}`,
-                    },
+                    headers: { Authorization: `Bearer ${userLogin}` },
                 });
                 const fetchedPlan = {
                     ...response.data,
                     exercises: response.data.exercises.map(item => ({
                         ...item,
-                        kg: item.kg !== undefined ? item.kg : 0
+                        kg: item.kg !== undefined ? item.kg : 0,
+                        restTimeSeconds: item.restTimeSeconds !== undefined ? item.restTimeSeconds : 60
                     }))
                 };
                 setWorkoutPlan(fetchedPlan);
@@ -72,15 +69,18 @@ export default function EditWorkoutPlanPage() {
     const handleAddExercise = (newExerciseData) => {
         setWorkoutPlan(prevPlan => {
             if (!prevPlan) return prevPlan;
-
             const isAlreadyAdded = prevPlan.exercises.some(item => item.exercise._id === newExerciseData.exercise._id);
             if (isAlreadyAdded) {
                 alert('Questo esercizio è già stato aggiunto alla scheda.');
                 return prevPlan;
             }
+            const exerciseToAdd = {
+                ...newExerciseData,
+                restTimeSeconds: newExerciseData.restTimeSeconds !== undefined ? newExerciseData.restTimeSeconds : 60
+            };
             return {
                 ...prevPlan,
-                exercises: [...prevPlan.exercises, { ...newExerciseData }]
+                exercises: [...prevPlan.exercises, { ...exerciseToAdd }]
             };
         });
     };
@@ -94,6 +94,7 @@ export default function EditWorkoutPlanPage() {
             };
         });
     };
+
     const handleUpdateExerciseDetail = (exerciseId, field, value) => {
         setWorkoutPlan(prevPlan => {
             if (!prevPlan) return prevPlan;
@@ -124,18 +125,17 @@ export default function EditWorkoutPlanPage() {
         try {
             const exercisesToSend = workoutPlan.exercises.map(item => ({
                 exercise: item.exercise._id,
-                sets: item.sets,
-                reps: item.reps,
-                kg: item.kg
+                sets: parseInt(item.sets) || 0,
+                reps: parseInt(item.reps) || 0,
+                kg: parseFloat(item.kg) || 0,
+                restTimeSeconds: parseInt(item.restTimeSeconds) || 0
             }));
 
             await axios.put(`https://capstone-skmb.onrender.com/api/workoutplans/${workoutPlan._id}`, {
                 name: workoutPlan.name,
                 exercises: exercisesToSend
             }, {
-                headers: {
-                    Authorization: `Bearer ${userLogin}`,
-                },
+                headers: { Authorization: `Bearer ${userLogin}` },
             });
             navigate('/profile');
         } catch (err) {
