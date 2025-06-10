@@ -10,10 +10,10 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedExercise, setSelectedExercise] = useState(null);
-    const [sets, setSets] = useState(3);
-    const [reps, setReps] = useState(10);
-    const [kg, setKg] = useState(0);
-    const [restTimeSeconds, setRestTimeSeconds] = useState(60);
+    const [sets, setSets] = useState('');
+    const [reps, setReps] = useState('');
+    const [kg, setKg] = useState('');
+    const [restTimeSeconds, setRestTimeSeconds] = useState('');
 
     useEffect(() => {
         const fetchAllExercises = async () => {
@@ -37,10 +37,10 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
         if (show) {
             fetchAllExercises();
             setSelectedExercise(null);
-            setSets(3);
-            setReps(10);
-            setKg(0);
-            setRestTimeSeconds(60);
+            setSets('');
+            setReps('');
+            setKg('');
+            setRestTimeSeconds('');
             setSearchTerm('');
         }
     }, [show]);
@@ -63,12 +63,17 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
     };
 
     const handleAddSelectedExercise = () => {
-        const parsedSets = parseInt(sets);
-        const parsedReps = parseInt(reps);
-        const parsedKg = parseFloat(kg);
-        const parsedRestTime = parseInt(restTimeSeconds);
+        const parsedSets = sets === '' ? NaN : parseInt(sets);
+        const parsedReps = reps === '' ? NaN : parseInt(reps);
+        const parsedKg = kg === '' ? NaN : parseFloat(kg);
+        const parsedRestTime = restTimeSeconds === '' ? NaN : parseInt(restTimeSeconds);
 
-        if (selectedExercise && parsedSets > 0 && parsedReps > 0 && !isNaN(parsedKg) && parsedRestTime >= 0) {
+        if (selectedExercise &&
+            !isNaN(parsedSets) && parsedSets > 0 &&
+            !isNaN(parsedReps) && parsedReps > 0 &&
+            !isNaN(parsedKg) &&
+            !isNaN(parsedRestTime) && parsedRestTime >= 0
+        ) {
             onAddExercise({
                 exercise: selectedExercise,
                 sets: parsedSets,
@@ -77,14 +82,14 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 restTimeSeconds: parsedRestTime
             });
             setSelectedExercise(null);
-            setSets(3);
-            setReps(10);
-            setKg(0);
-            setRestTimeSeconds(60);
+            setSets('');
+            setReps('');
+            setKg('');
+            setRestTimeSeconds('');
             setSearchTerm('');
             handleClose();
         } else {
-            alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere maggiori di 0), kg e tempo di recupero (non negativo).');
+            alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere numeri interi positivi), kg (numero) e tempo di recupero (numero non negativo).');
         }
     };
 
@@ -147,7 +152,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                                         type="number"
                                         min="1"
                                         value={sets}
-                                        onChange={(e) => setSets(parseInt(e.target.value) || 1)}
+                                        onChange={(e) => setSets(e.target.value)}
                                         required
                                     />
                                 </Col>
@@ -157,7 +162,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                                         type="number"
                                         min="1"
                                         value={reps}
-                                        onChange={(e) => setReps(parseInt(e.target.value) || 1)}
+                                        onChange={(e) => setReps(e.target.value)}
                                         required
                                     />
                                 </Col>
@@ -168,7 +173,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                                         min="0"
                                         step="0.5"
                                         value={kg}
-                                        onChange={(e) => setKg(parseFloat(e.target.value) || 0)}
+                                        onChange={(e) => setKg(e.target.value)}
                                         required
                                     />
                                 </Col>
@@ -179,7 +184,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                                     type="number"
                                     min="0"
                                     value={restTimeSeconds}
-                                    onChange={(e) => setRestTimeSeconds(parseInt(e.target.value) || 0)}
+                                    onChange={(e) => setRestTimeSeconds(e.target.value)}
                                     required
                                 />
                             </Form.Group>
@@ -191,7 +196,13 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 <Button variant="secondary" onClick={handleClose}>
                     Annulla
                 </Button>
-                <Button variant="primary" onClick={handleAddSelectedExercise} disabled={!selectedExercise || sets <= 0 || reps <= 0}>
+                <Button variant="primary" onClick={handleAddSelectedExercise} disabled={
+                    !selectedExercise ||
+                    sets === '' || parseInt(sets) <= 0 || isNaN(parseInt(sets)) ||
+                    reps === '' || parseInt(reps) <= 0 || isNaN(parseInt(reps)) ||
+                    kg === '' || isNaN(parseFloat(kg)) ||
+                    restTimeSeconds === '' || parseInt(restTimeSeconds) < 0 || isNaN(parseInt(restTimeSeconds))
+                }>
                     Aggiungi Esercizio alla Scheda
                 </Button>
             </Modal.Footer>
