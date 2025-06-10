@@ -10,11 +10,11 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 576);
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsSmallScreen(window.innerWidth < 576);
         };
 
         window.addEventListener('resize', handleResize);
@@ -95,9 +95,9 @@ export default function HomePage() {
                             Attenzione: {error}
                         </Alert>
                     )}
-                    {isMobile ? (
+                    {isSmallScreen ? (
                         <div className="home-stats-carousel-wrapper">
-                            <Carousel interval={null} indicators={false} className="home-stats-carousel">
+                            <Carousel interval={null} controls={true} indicators={false} className="home-stats-carousel">
                                 <Carousel.Item>
                                     <Card className="home-stat-card">
                                         <Card.Body className="text-center">
@@ -138,7 +138,7 @@ export default function HomePage() {
                         </div>
                     ) : (
                         <Row className="home-stats-row justify-content-center">
-                            <Col md={4} className="mb-4">
+                            <Col md={4} className="mb-4 d-flex">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Schede Create</h3>
@@ -149,7 +149,7 @@ export default function HomePage() {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            <Col md={4} className="mb-4">
+                            <Col md={4} className="mb-4 d-flex">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Allenamenti Registrati</h3>
@@ -160,7 +160,7 @@ export default function HomePage() {
                                     </Card.Body>
                                 </Card>
                             </Col>
-                            <Col md={4} className="mb-4">
+                            <Col md={4} className="mb-4 d-flex">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Ultimo Allenamento</h3>
