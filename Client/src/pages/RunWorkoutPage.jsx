@@ -15,6 +15,7 @@ export default function RunWorkoutPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+
     const timerIntervals = useRef({});
 
     useEffect(() => {
@@ -42,7 +43,6 @@ export default function RunWorkoutPage() {
                         weight: ex.kg !== undefined ? ex.kg.toString() : '',
                         restTimeRemaining: ex.restTimeSeconds || 0,
                         isTimerActive: false,
-                        timerId: null
                     }));
                 });
                 setCurrentLogs(initialLogs);
@@ -76,44 +76,37 @@ export default function RunWorkoutPage() {
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
 
-    const startTimer = (exerciseId, setNumber, initialTime) => {
-        if (currentLogs[exerciseId]?.find(set => set.setNumber === setNumber)?.isTimerActive) {
-            return;
-        }
-
-        if (timerIntervals.current[`${exerciseId}-${setNumber}`]) {
-            clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
-        }
-
+    const startTimer = (exerciseId, setNumber) => {
         setCurrentLogs(prevLogs => {
             const updatedLogs = {
                 ...prevLogs,
                 [exerciseId]: prevLogs[exerciseId].map(set =>
                     set.setNumber === setNumber
-                        ? { ...set, isTimerActive: true, restTimeRemaining: initialTime }
+                        ? { ...set, isTimerActive: true }
                         : set
                 )
             };
             return updatedLogs;
         });
 
+        if (timerIntervals.current[`${exerciseId}-${setNumber}`]) {
+            clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
+        }
+
         const intervalId = setInterval(() => {
             setCurrentLogs(prevLogs => {
-                const updatedLogs = {
-                    ...prevLogs,
-                    [exerciseId]: prevLogs[exerciseId].map(set => {
-                        if (set.setNumber === setNumber) {
-                            if (set.restTimeRemaining > 0) {
-                                return { ...set, restTimeRemaining: set.restTimeRemaining - 1 };
-                            } else {
-                                clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
-                                delete timerIntervals.current[`${exerciseId}-${setNumber}`];
-                                return { ...set, isTimerActive: false, restTimeRemaining: initialTime };
-                            }
-                        }
-                        return set;
-                    })
-                };
+                const updatedLogs = { ...prevLogs };
+                const targetSet = updatedLogs[exerciseId].find(set => set.setNumber === setNumber);
+
+                if (targetSet) {
+                    if (targetSet.restTimeRemaining > 0) {
+                        targetSet.restTimeRemaining--;
+                    } else {
+                        clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
+                        delete timerIntervals.current[`${exerciseId}-${setNumber}`];
+                        targetSet.isTimerActive = false;
+                    }
+                }
                 return updatedLogs;
             });
         }, 1000);
@@ -138,6 +131,17 @@ export default function RunWorkoutPage() {
         }));
     };
 
+    const resetTimer = (exerciseId, setNumber, initialTime) => {
+        stopTimer(exerciseId, setNumber);
+        setCurrentLogs(prevLogs => ({
+            ...prevLogs,
+            [exerciseId]: prevLogs[exerciseId].map(set =>
+                set.setNumber === setNumber
+                    ? { ...set, restTimeRemaining: initialTime, isTimerActive: false }
+                    : set
+            )
+        }));
+    };
 
     const handleLogChange = (exerciseId, setNumber, field, value) => {
         setCurrentLogs(prevLogs => ({
@@ -151,8 +155,8 @@ export default function RunWorkoutPage() {
     const handleAddSet = (exerciseId) => {
         const exerciseInPlan = workoutPlan.exercises.find(ex => ex.exercise._id === exerciseId);
         const defaultReps = exerciseInPlan ? exerciseInPlan.reps.toString() : '';
-        const defaultWeight = exerciseInPlan && exerciseInPlan.kg !== undefined ? ex.kg.toString() : '';
-        const defaultRestTime = exerciseInPlan ? ex.restTimeSeconds || 0 : 0;
+        const defaultWeight = exerciseInPlan && exerciseInPlan.kg !== undefined ? exerciseInPlan.kg.toString() : '';
+        const defaultRestTime = exerciseInPlan ? exerciseInPlan.restTimeSeconds || 0 : 0; 
 
         setCurrentLogs(prevLogs => ({
             ...prevLogs,
@@ -162,7 +166,6 @@ export default function RunWorkoutPage() {
                 weight: defaultWeight,
                 restTimeRemaining: defaultRestTime,
                 isTimerActive: false,
-                timerId: null
             }]
         }));
     };
@@ -187,6 +190,7 @@ export default function RunWorkoutPage() {
         setIsSaving(true);
         setSuccessMessage(null);
         setErrorMessage(null);
+
         Object.keys(timerIntervals.current).forEach(key => clearInterval(timerIntervals.current[key]));
         timerIntervals.current = {};
 
@@ -284,55 +288,84 @@ export default function RunWorkoutPage() {
                             <Card.Body>
                                 <Card.Title>
                                     {ex.exercise.name} <small className="text-muted">({ex.exercise.targetMuscle})</small>
-                                    {ex.restTimeSeconds && <span className="ms-3 badge bg-info">Recupero Predefinito: {ex.restTimeSeconds}s</span>}
                                 </Card.Title>
-                                {currentLogs[ex.exercise._id]?.map((set, index) => (
-                                    <Row key={`${ex.exercise._id}-${set.setNumber}`} className="align-items-center mb-2">
-                                        <Col xs={1}>Set {set.setNumber}</Col>
-                                        <Col xs={3}>
-                                            <Form.Control
-                                                type="number"
-                                                placeholder="Reps"
-                                                value={set.reps}
-                                                onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)}
-                                            />
-                                        </Col>
-                                        <Col xs={3}>
-                                            <Form.Control
-                                                type="number"
-                                                step="0.5"
-                                                placeholder="Peso (kg)"
-                                                value={set.weight}
-                                                onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'weight', e.target.value)}
-                                            />
-                                        </Col>
-                                        <Col xs={2} className="text-center">
-                                            {set.isTimerActive ? (
-                                                <Button
-                                                    variant="warning"
-                                                    size="sm"
-                                                    onClick={() => stopTimer(ex.exercise._id, set.setNumber)}
-                                                >
-                                                    Stop: {formatTime(set.restTimeRemaining)}
+                                {currentLogs[ex.exercise._id]?.map((set) => {
+                                    const initialRestTime = workoutPlan.exercises.find(e => e.exercise._id === ex.exercise._id)?.restTimeSeconds || 0;
+                                    const progressBarWidth = (set.restTimeRemaining / initialRestTime) * 100;
+
+                                    return (
+                                        <Row key={`${ex.exercise._id}-${set.setNumber}`} className="align-items-center mb-2">
+                                            <Col xs={1}>Set {set.setNumber}</Col>
+                                            <Col xs={3}>
+                                                <Form.Control
+                                                    type="number"
+                                                    placeholder="Reps"
+                                                    value={set.reps}
+                                                    onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)}
+                                                />
+                                            </Col>
+                                            <Col xs={3}>
+                                                <Form.Control
+                                                    type="number"
+                                                    step="0.5"
+                                                    placeholder="Peso (kg)"
+                                                    value={set.weight}
+                                                    onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'weight', e.target.value)}
+                                                />
+                                            </Col>
+                                            <Col xs={4} className="d-flex align-items-center">
+                                                {!set.isTimerActive && set.restTimeRemaining > 0 && (
+                                                    <Button
+                                                        variant="outline-success"
+                                                        size="sm"
+                                                        onClick={() => startTimer(ex.exercise._id, set.setNumber)}
+                                                        className="me-1"
+                                                    >
+                                                        &#9654;
+                                                    </Button>
+                                                )}
+                                                {set.isTimerActive && (
+                                                    <Button
+                                                        variant="outline-warning"
+                                                        size="sm"
+                                                        onClick={() => stopTimer(ex.exercise._id, set.setNumber)}
+                                                        className="me-1"
+                                                    >
+                                                        &#9208;
+                                                    </Button>
+                                                )}
+                                                {set.restTimeRemaining !== initialRestTime && (
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        size="sm"
+                                                        onClick={() => resetTimer(ex.exercise._id, set.setNumber, initialRestTime)}
+                                                        className="me-2"
+                                                    >
+                                                        &#8634;
+                                                    </Button>
+                                                )}
+                                                <span className="me-2 text-white">{formatTime(set.restTimeRemaining)}</span>
+                                                <div className="progress-bar-container flex-grow-1" style={{ height: '20px', backgroundColor: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}>
+                                                    <div
+                                                        className="progress-bar-fill"
+                                                        style={{
+                                                            width: `${progressBarWidth}%`,
+                                                            height: '100%',
+                                                            backgroundColor: '#4CAF50',
+                                                            transition: set.isTimerActive ? 'width 1s linear' : 'none',
+                                                            borderRadius: '5px'
+                                                        }}
+                                                    ></div>
+                                                </div>
+                                            </Col>
+                                            <Col xs={1}>
+                                                <Button variant="outline-danger" size="sm" onClick={() => handleRemoveSet(ex.exercise._id, set.setNumber)}>
+                                                    Rimuovi Set
                                                 </Button>
-                                            ) : (
-                                                <Button
-                                                    variant="outline-primary"
-                                                    size="sm"
-                                                    onClick={() => startTimer(ex.exercise._id, set.setNumber, ex.restTimeSeconds || 0)}
-                                                    disabled={ex.restTimeSeconds === 0 || !ex.restTimeSeconds}
-                                                >
-                                                    Start: {formatTime(ex.restTimeSeconds || 0)}
-                                                </Button>
-                                            )}
-                                        </Col>
-                                        <Col xs={3}>
-                                            <Button variant="outline-danger" size="sm" onClick={() => handleRemoveSet(ex.exercise._id, set.setNumber)}>
-                                                Rimuovi Set
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                ))}
+                                            </Col>
+                                        </Row>
+                                    );
+                                })}
                                 <Button variant="outline-info" size="sm" className="mt-2" onClick={() => handleAddSet(ex.exercise._id)}>
                                     + Aggiungi Set
                                 </Button>
