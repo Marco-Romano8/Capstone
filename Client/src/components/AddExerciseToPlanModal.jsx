@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, FormControl, ListGroup, Spinner, Alert, Row, Col, Card } from 'react-bootstrap';
+import { Modal, Button, Form, FormControl, ListGroup, Spinner, Alert, Row, Col, Card, Dropdown, DropdownButton } from 'react-bootstrap';
 import axios from 'axios';
 import '../assets/styles/AddExerciseToPlanModal.css';
 
@@ -9,6 +9,8 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [filterMuscle, setFilterMuscle] = useState('');
+    const [uniqueMuscles, setUniqueMuscles] = useState([]);
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [sets, setSets] = useState('');
     const [reps, setReps] = useState('');
@@ -25,7 +27,8 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setAllExercises(response.data);
-                setFilteredExercises(response.data);
+                const muscles = [...new Set(response.data.map(ex => ex.targetMuscle))];
+                setUniqueMuscles(['Tutti', ...muscles].sort());
                 setLoading(false);
             } catch (err) {
                 console.error('Errore nel recupero di tutti gli esercizi:', err);
@@ -42,17 +45,20 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
             setKg('');
             setRestTimeSeconds('');
             setSearchTerm('');
+            setFilterMuscle('');
         }
     }, [show]);
 
     useEffect(() => {
         const lowercasedSearchTerm = searchTerm.toLowerCase();
-        const newFiltered = allExercises.filter(exercise =>
-            exercise.name.toLowerCase().includes(lowercasedSearchTerm) &&
-            !currentPlanExercises.some(planExercise => planExercise && planExercise.exercise && planExercise.exercise._id === exercise._id)
-        );
+        const newFiltered = allExercises.filter(exercise => {
+            const matchesSearchTerm = exercise.name.toLowerCase().includes(lowercasedSearchTerm);
+            const matchesMuscleFilter = filterMuscle === '' || filterMuscle === 'Tutti' || exercise.targetMuscle === filterMuscle;
+            const notInCurrentPlan = !currentPlanExercises.some(planExercise => planExercise && planExercise.exercise && planExercise.exercise._id === exercise._id);
+            return matchesSearchTerm && matchesMuscleFilter && notInCurrentPlan;
+        });
         setFilteredExercises(newFiltered);
-    }, [searchTerm, allExercises, currentPlanExercises]);
+    }, [searchTerm, filterMuscle, allExercises, currentPlanExercises]);
 
     const handleSelectExercise = (exercise) => {
         setSelectedExercise(exercise);
@@ -87,6 +93,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
             setKg('');
             setRestTimeSeconds('');
             setSearchTerm('');
+            setFilterMuscle('');
             handleClose();
         } else {
             alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere numeri interi positivi), kg (numero) e tempo di recupero (numero non negativo).');
@@ -100,14 +107,36 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
             </Modal.Header>
             <Modal.Body>
                 {error && <Alert variant="danger">{error}</Alert>}
-                <Form.Group className="mb-3">
-                    <FormControl
-                        type="text"
-                        placeholder="Cerca esercizio per nome..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </Form.Group>
+                <Row className="mb-3">
+                    <Col xs={12} md={8}>
+                        <Form.Group>
+                            <FormControl
+                                type="text"
+                                placeholder="Cerca esercizio per nome..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col xs={12} md={4}>
+                        <DropdownButton
+                            id="dropdown-filter-muscle"
+                            title={filterMuscle === '' || filterMuscle === 'Tutti' ? "Filtra per Muscolo" : `Muscolo: ${filterMuscle}`}
+                            variant="outline-secondary"
+                            className="w-100"
+                        >
+                            {uniqueMuscles.map((muscle) => (
+                                <Dropdown.Item
+                                    key={muscle}
+                                    onClick={() => setFilterMuscle(muscle)}
+                                    active={filterMuscle === muscle}
+                                >
+                                    {muscle}
+                                </Dropdown.Item>
+                            ))}
+                        </DropdownButton>
+                    </Col>
+                </Row>
 
                 {loading ? (
                     <div className="text-center">
