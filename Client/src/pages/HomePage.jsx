@@ -10,8 +10,15 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+
         const fetchUserData = async () => {
             const userLogin = localStorage.getItem('userLogin');
             if (userLogin) {
@@ -35,6 +42,10 @@ export default function HomePage() {
             setLoading(false);
         };
         fetchUserData();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     if (loading) {
@@ -84,9 +95,50 @@ export default function HomePage() {
                             Attenzione: {error}
                         </Alert>
                     )}
-                    <div className="home-stats-carousel-wrapper">
-                        <Carousel indicators={false} controls={false} interval={5000} className="home-stats-carousel">
-                            <Carousel.Item>
+                    {isMobile ? (
+                        <div className="home-stats-carousel-wrapper">
+                            <Carousel interval={null} indicators={false} className="home-stats-carousel">
+                                <Carousel.Item>
+                                    <Card className="home-stat-card">
+                                        <Card.Body className="text-center">
+                                            <h3 className="card-title-orange">Schede Create</h3>
+                                            <p className="stat-number">{userData?.totalPlans || 0}</p>
+                                            <Link to="/profile" className="btn-custom-secondary">
+                                                <i className="bi bi-journal-album"></i> Le Tue Schede
+                                            </Link>
+                                        </Card.Body>
+                                    </Card>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <Card className="home-stat-card">
+                                        <Card.Body className="text-center">
+                                            <h3 className="card-title-orange">Allenamenti Registrati</h3>
+                                            <p className="stat-number">{userData?.totalWorkouts || 0}</p>
+                                            <Link to="/workout-logs" className="btn-custom-secondary">
+                                                <i className="bi bi-clipboard-check"></i> I Tuoi Log
+                                            </Link>
+                                        </Card.Body>
+                                    </Card>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <Card className="home-stat-card">
+                                        <Card.Body className="text-center">
+                                            <h3 className="card-title-orange">Ultimo Allenamento</h3>
+                                            <p className="stat-text">{userData?.lastWorkoutDate ? new Date(userData.lastWorkoutDate).toLocaleDateString() : 'Nessuno'}</p>
+                                            <p className="stat-text-small">{userData?.lastWorkoutName || 'Inizia ora!'}</p>
+                                            {userData?.lastWorkoutId && (
+                                                <Link to={`/workout-logs/${userData.lastWorkoutId}`} className="btn-custom-secondary mt-2">
+                                                    <i className="bi bi-eye"></i> Vedi Dettagli
+                                                </Link>
+                                            )}
+                                        </Card.Body>
+                                    </Card>
+                                </Carousel.Item>
+                            </Carousel>
+                        </div>
+                    ) : (
+                        <Row className="home-stats-row justify-content-center">
+                            <Col md={4} className="mb-4">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Schede Create</h3>
@@ -96,8 +148,8 @@ export default function HomePage() {
                                         </Link>
                                     </Card.Body>
                                 </Card>
-                            </Carousel.Item>
-                            <Carousel.Item>
+                            </Col>
+                            <Col md={4} className="mb-4">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Allenamenti Registrati</h3>
@@ -107,8 +159,8 @@ export default function HomePage() {
                                         </Link>
                                     </Card.Body>
                                 </Card>
-                            </Carousel.Item>
-                            <Carousel.Item>
+                            </Col>
+                            <Col md={4} className="mb-4">
                                 <Card className="home-stat-card">
                                     <Card.Body className="text-center">
                                         <h3 className="card-title-orange">Ultimo Allenamento</h3>
@@ -121,9 +173,9 @@ export default function HomePage() {
                                         )}
                                     </Card.Body>
                                 </Card>
-                            </Carousel.Item>
-                        </Carousel>
-                    </div>
+                            </Col>
+                        </Row>
+                    )}
                     <div className="home-cta-section">
                         <h2 className="cta-heading">Pronto per il tuo prossimo allenamento?</h2>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
