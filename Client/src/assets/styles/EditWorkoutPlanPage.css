@@ -37,6 +37,7 @@
     background-color: var(--primary-orange);
     color: var(--text-color-light);
     transform: translateY(-2px);
+    border: 2px solid var(--primary-orange);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
