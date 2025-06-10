@@ -228,7 +228,7 @@ export default function RunWorkoutPage() {
                                             </Col>
                                             <Col xs={12} sm={3}>
                                                 <Form.Group className="mb-0 d-flex align-items-center">
-                                                    <Form.Label className="me-2 mb-0 fw-bold">Rip.:</Form.Label>
+                                                    <Form.Label className="me-2 mb-0 fw-bold">Rep:</Form.Label>
                                                     <Form.Control type="number" placeholder="Reps" value={set.reps}
                                                         onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)} />
                                                 </Form.Group>
