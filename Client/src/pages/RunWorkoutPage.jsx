@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Spinner, Alert, Card, Button, Form, Row, Col } from 'react-bootstrap';
@@ -15,6 +15,7 @@ export default function RunWorkoutPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
+    const timerIntervals = useRef({});
 
     useEffect(() => {
         const fetchWorkoutPlan = async () => {
@@ -38,7 +39,10 @@ export default function RunWorkoutPage() {
                     initialLogs[ex.exercise._id] = Array.from({ length: ex.sets }, (_, i) => ({
                         setNumber: i + 1,
                         reps: ex.reps.toString(),
-                        weight: ex.kg !== undefined ? ex.kg.toString() : ''
+                        weight: ex.kg !== undefined ? ex.kg.toString() : '',
+                        restTimeRemaining: ex.restTimeSeconds || 0,
+                        isTimerActive: false,
+                        timerId: null
                     }));
                 });
                 setCurrentLogs(initialLogs);
@@ -60,7 +64,80 @@ export default function RunWorkoutPage() {
 
         setSuccessMessage(null);
         setErrorMessage(null);
+
+        return () => {
+            Object.values(timerIntervals.current).forEach(clearInterval);
+        };
     }, [id, navigate]);
+
+    const formatTime = (totalSeconds) => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    };
+
+    const startTimer = (exerciseId, setNumber, initialTime) => {
+        if (currentLogs[exerciseId]?.find(set => set.setNumber === setNumber)?.isTimerActive) {
+            return;
+        }
+
+        if (timerIntervals.current[`${exerciseId}-${setNumber}`]) {
+            clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
+        }
+
+        setCurrentLogs(prevLogs => {
+            const updatedLogs = {
+                ...prevLogs,
+                [exerciseId]: prevLogs[exerciseId].map(set =>
+                    set.setNumber === setNumber
+                        ? { ...set, isTimerActive: true, restTimeRemaining: initialTime }
+                        : set
+                )
+            };
+            return updatedLogs;
+        });
+
+        const intervalId = setInterval(() => {
+            setCurrentLogs(prevLogs => {
+                const updatedLogs = {
+                    ...prevLogs,
+                    [exerciseId]: prevLogs[exerciseId].map(set => {
+                        if (set.setNumber === setNumber) {
+                            if (set.restTimeRemaining > 0) {
+                                return { ...set, restTimeRemaining: set.restTimeRemaining - 1 };
+                            } else {
+                                clearInterval(timerIntervals.current[`${exerciseId}-${setNumber}`]);
+                                delete timerIntervals.current[`${exerciseId}-${setNumber}`];
+                                return { ...set, isTimerActive: false, restTimeRemaining: initialTime };
+                            }
+                        }
+                        return set;
+                    })
+                };
+                return updatedLogs;
+            });
+        }, 1000);
+
+        timerIntervals.current[`${exerciseId}-${setNumber}`] = intervalId;
+    };
+
+    const stopTimer = (exerciseId, setNumber) => {
+        const timerKey = `${exerciseId}-${setNumber}`;
+        if (timerIntervals.current[timerKey]) {
+            clearInterval(timerIntervals.current[timerKey]);
+            delete timerIntervals.current[timerKey];
+        }
+
+        setCurrentLogs(prevLogs => ({
+            ...prevLogs,
+            [exerciseId]: prevLogs[exerciseId].map(set =>
+                set.setNumber === setNumber
+                    ? { ...set, isTimerActive: false }
+                    : set
+            )
+        }));
+    };
+
 
     const handleLogChange = (exerciseId, setNumber, field, value) => {
         setCurrentLogs(prevLogs => ({
@@ -74,29 +151,44 @@ export default function RunWorkoutPage() {
     const handleAddSet = (exerciseId) => {
         const exerciseInPlan = workoutPlan.exercises.find(ex => ex.exercise._id === exerciseId);
         const defaultReps = exerciseInPlan ? exerciseInPlan.reps.toString() : '';
-        const defaultWeight = exerciseInPlan && exerciseInPlan.kg !== undefined ? exerciseInPlan.kg.toString() : '';
+        const defaultWeight = exerciseInPlan && exerciseInPlan.kg !== undefined ? ex.kg.toString() : '';
+        const defaultRestTime = exerciseInPlan ? ex.restTimeSeconds || 0 : 0;
 
         setCurrentLogs(prevLogs => ({
             ...prevLogs,
             [exerciseId]: [...prevLogs[exerciseId], {
                 setNumber: prevLogs[exerciseId].length + 1,
                 reps: defaultReps,
-                weight: defaultWeight
+                weight: defaultWeight,
+                restTimeRemaining: defaultRestTime,
+                isTimerActive: false,
+                timerId: null
             }]
         }));
     };
 
     const handleRemoveSet = (exerciseId, setNumber) => {
-        setCurrentLogs(prevLogs => ({
-            ...prevLogs,
-            [exerciseId]: prevLogs[exerciseId].filter(set => set.setNumber !== setNumber)
-        }));
+        stopTimer(exerciseId, setNumber);
+
+        setCurrentLogs(prevLogs => {
+            const updatedLogs = {
+                ...prevLogs,
+                [exerciseId]: prevLogs[exerciseId].filter(set => set.setNumber !== setNumber)
+            };
+            updatedLogs[exerciseId] = updatedLogs[exerciseId].map((set, index) => ({
+                ...set,
+                setNumber: index + 1
+            }));
+            return updatedLogs;
+        });
     };
 
     const saveWorkoutLog = async () => {
         setIsSaving(true);
         setSuccessMessage(null);
         setErrorMessage(null);
+        Object.keys(timerIntervals.current).forEach(key => clearInterval(timerIntervals.current[key]));
+        timerIntervals.current = {};
 
         const userLogin = localStorage.getItem("userLogin");
         if (!userLogin) {
@@ -192,12 +284,12 @@ export default function RunWorkoutPage() {
                             <Card.Body>
                                 <Card.Title>
                                     {ex.exercise.name} <small className="text-muted">({ex.exercise.targetMuscle})</small>
-                                    {ex.restTimeSeconds && <span className="ms-3 badge bg-info">Recupero: {ex.restTimeSeconds}s</span>}
+                                    {ex.restTimeSeconds && <span className="ms-3 badge bg-info">Recupero Predefinito: {ex.restTimeSeconds}s</span>}
                                 </Card.Title>
                                 {currentLogs[ex.exercise._id]?.map((set, index) => (
-                                    <Row key={set.setNumber} className="align-items-center mb-2">
+                                    <Row key={`${ex.exercise._id}-${set.setNumber}`} className="align-items-center mb-2">
                                         <Col xs={1}>Set {set.setNumber}</Col>
-                                        <Col xs={4}>
+                                        <Col xs={3}>
                                             <Form.Control
                                                 type="number"
                                                 placeholder="Reps"
@@ -205,7 +297,7 @@ export default function RunWorkoutPage() {
                                                 onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)}
                                             />
                                         </Col>
-                                        <Col xs={4}>
+                                        <Col xs={3}>
                                             <Form.Control
                                                 type="number"
                                                 step="0.5"
@@ -213,6 +305,26 @@ export default function RunWorkoutPage() {
                                                 value={set.weight}
                                                 onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'weight', e.target.value)}
                                             />
+                                        </Col>
+                                        <Col xs={2} className="text-center">
+                                            {set.isTimerActive ? (
+                                                <Button
+                                                    variant="warning"
+                                                    size="sm"
+                                                    onClick={() => stopTimer(ex.exercise._id, set.setNumber)}
+                                                >
+                                                    Stop: {formatTime(set.restTimeRemaining)}
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="outline-primary"
+                                                    size="sm"
+                                                    onClick={() => startTimer(ex.exercise._id, set.setNumber, ex.restTimeSeconds || 0)}
+                                                    disabled={ex.restTimeSeconds === 0 || !ex.restTimeSeconds}
+                                                >
+                                                    Start: {formatTime(ex.restTimeSeconds || 0)}
+                                                </Button>
+                                            )}
                                         </Col>
                                         <Col xs={3}>
                                             <Button variant="outline-danger" size="sm" onClick={() => handleRemoveSet(ex.exercise._id, set.setNumber)}>
