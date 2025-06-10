@@ -82,15 +82,9 @@ export default function ExerciseDetailPage() {
                             />
                         </div>
                         <div className="flex-grow-1 text-center text-md-start">
-                            <Card.Text className="lead mb-3 exercise-detail-text">
-                                <strong>Muscolo Target:</strong> {exercise.targetMuscle}
-                            </Card.Text>
-                            <Card.Text className="lead mb-3 exercise-detail-text">
-                                <strong>Equipaggiamento:</strong> {exercise.equipment}
-                            </Card.Text>
-                            <Card.Text className="lead mb-3 exercise-detail-text">
-                                <strong>Difficoltà:</strong> {exercise.difficulty}
-                            </Card.Text>
+                            <h5 className="description-title">Muscolo Target: <span className="normal-text">{exercise.targetMuscle}</span></h5>
+                            <h5 className="description-title">Equipaggiamento: <span className="normal-text">{exercise.equipment}</span></h5>
+                            <h5 className="description-title">Difficoltà: <span className="normal-text">{exercise.difficulty}</span></h5>
                             <h5 className="description-title">Descrizione:</h5>
                             <Card.Text className="mb-4 exercise-description">
                                 <small className="text-muted">
