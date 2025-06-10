@@ -126,7 +126,7 @@
 .run-workout-page-container .form-control:focus {
     background-color: var(--input-background-focus);
     border-color: var(--primary-orange);
-    box-shadow: 0 0 0 0.2rem rgba(255, 165, 0, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(255, 102, 0, 0.25);
     color: var(--text-color-dark);
 }
 
@@ -198,22 +198,22 @@
 }
 
 .run-workout-page-container .btn-outline-success {
-    color: #28a745;
-    border-color: #28a745;
+    color: var(--primary-orange);
+    border-color: var(--primary-orange);
 }
 
 .run-workout-page-container .btn-outline-success:hover {
-    background-color: #28a745;
+    background-color: var(--primary-orange);
     color: white;
 }
 
 .run-workout-page-container .btn-outline-warning {
-    color: #ffc107;
-    border-color: #ffc107;
+    color: var(--primary-orange);
+    border-color: var(--primary-orange);
 }
 
 .run-workout-page-container .btn-outline-warning:hover {
-    background-color: #ffc107;
+    background-color: var(--primary-orange);
     color: white;
 }
 
@@ -229,7 +229,7 @@
 
 .progress-bar-container {
     height: 20px;
-    background-color: var(--input-background);
+    background-color: var(--primary-orange-light);
     border-radius: 5px;
     overflow: hidden;
     margin-left: 0.5rem;
@@ -252,59 +252,71 @@
         font-size: 2rem;
         margin-top: 1rem;
     }
-
     .run-workout-page-container .card-body {
         padding: 1.5rem;
     }
-
     .run-workout-page-container .card-title {
         font-size: 1.5rem;
         flex-direction: column;
         align-items: flex-start;
     }
-
-    .run-workout-page-container .row.align-items-center.mb-2>.col-1 {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-bottom: 0.5rem;
-        text-align: left;
+    .run-workout-page-container .card-title small.text-muted {
+        font-size: 0.7em;
     }
-
-    .run-workout-page-container .row.align-items-center.mb-2>.col-4 {
-        flex: 0 0 50%;
-        max-width: 50%;
+    .run-workout-page-container .row.align-items-center.mb-2 {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0.75rem;
+        margin-bottom: 0.75rem !important;
+        align-items: center;
     }
-
-    .run-workout-page-container .row.align-items-center.mb-2>.col-3 {
-        flex: 0 0 100%;
-        max-width: 100%;
-        margin-top: 0.75rem;
+    .run-workout-page-container .row.align-items-center.mb-2 > .col-1 {
+        flex-shrink: 0;
+        width: auto;
+        padding-right: 0.5rem;
     }
-
-    .run-workout-page-container .btn-outline-danger,
-    .run-workout-page-container .btn-outline-info {
-        width: 100%;
+    .run-workout-page-container .row.align-items-center.mb-2 > .col-3,
+    .run-workout-page-container .row.align-items-center.mb-2 > .col-4 {
+        flex-shrink: 0;
+        width: auto;
     }
-
+    .run-workout-page-container .form-control {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.85rem;
+        min-width: 60px;
+    }
     .run-workout-page-container .col-4.d-flex {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: flex-start;
+        align-items: center;
+        padding-left: 0.5rem;
     }
-
     .run-workout-page-container .col-4.d-flex .btn {
-        margin-bottom: 0.5rem;
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+        margin-right: 0.25rem;
     }
-
     .run-workout-page-container .col-4.d-flex .me-2.text-white {
-        flex-basis: 100%;
-        text-align: left;
-        margin-left: 0;
+        font-size: 0.9rem;
+        margin-right: 0.25rem !important;
+        flex-shrink: 0;
     }
-
     .progress-bar-container {
-        margin-top: 0.5rem;
-        margin-left: 0;
-        flex-basis: 100%;
+        height: 18px;
+        margin-left: 0.25rem;
+    }
+    .run-workout-page-container .btn-outline-danger {
+        width: auto;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .run-workout-page-container .btn-outline-info {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
     }
 }
 
