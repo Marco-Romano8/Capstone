@@ -88,8 +88,8 @@ export default function HomePage() {
                         <Col md={4} className="mb-4 d-flex">
                             <Card className="home-stat-card">
                                 <Card.Body className="text-center">
-                                    <h3 className="card-title-orange mb-2">Schede Create</h3>
-                                    <p className="stat-number mb-2">{userData?.totalPlans || 0}</p>
+                                    <h3 className="card-title-orange">Schede Create</h3>
+                                    <p className="stat-number">{userData?.totalPlans || 0}</p>
                                     <Link to="/profile" className="btn-custom-secondary">
                                         <i className="bi bi-journal-album"></i> Le Tue Schede
                                     </Link>
@@ -99,8 +99,8 @@ export default function HomePage() {
                         <Col md={4} className="mb-4 d-flex">
                             <Card className="home-stat-card">
                                 <Card.Body className="text-center">
-                                    <h3 className="card-title-orange mb-2">Allenamenti Registrati</h3>
-                                    <p className="stat-number mb-2">{userData?.totalWorkouts || 0}</p>
+                                    <h3 className="card-title-orange">Allenamenti Registrati</h3>
+                                    <p className="stat-number">{userData?.totalWorkouts || 0}</p>
                                     <Link to="/workout-logs" className="btn-custom-secondary">
                                         <i className="bi bi-clipboard-check"></i> I Tuoi Log
                                     </Link>
@@ -110,9 +110,9 @@ export default function HomePage() {
                         <Col md={4} className="mb-4 d-flex">
                             <Card className="home-stat-card">
                                 <Card.Body className="text-center">
-                                    <h3 className="card-title-orange mb-2">Ultimo Allenamento</h3>
+                                    <h3 className="card-title-orange">Ultimo Allenamento</h3>
                                     <p className="stat-text">{userData?.lastWorkoutDate ? new Date(userData.lastWorkoutDate).toLocaleDateString() : 'Nessuno'}</p>
-                                    <p className="stat-text-small mb-2">{userData?.lastWorkoutName || 'Inizia ora!'}</p>
+                                    <p className="stat-text-small">{userData?.lastWorkoutName || 'Inizia ora!'}</p>
                                     {userData?.lastWorkoutId && (
                                         <Link to={`/workout-logs/${userData.lastWorkoutId}`} className="btn-custom-secondary mt-2">
                                             <i className="bi bi-eye"></i> Vedi Dettagli
