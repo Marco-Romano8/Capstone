@@ -125,7 +125,7 @@ export default function HomePage() {
                     <div className="home-cta-section">
                         <h2 className="cta-heading">Pronto per il tuo prossimo allenamento?</h2>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <Link to="/profile" className="btn-main-cta">
+                            <Link to="/profile" state={{ showCreateModal: true }} className="btn-main-cta">
                                 <i className="bi bi-plus-circle"></i> Crea Nuova Scheda
                             </Link>
                             <Link to="/profile" className="btn-main-cta-secondary">

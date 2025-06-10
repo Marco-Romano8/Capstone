@@ -32,7 +32,6 @@ export default function ProfilePage() {
 
         if (tokenFromUrl) {
             localStorage.setItem('userLogin', tokenFromUrl);
-            console.log('Token da URL salvato nel localStorage per la ProfilePage.');
             const newUrl = new URL(window.location.href);
             newUrl.searchParams.delete('token');
             window.history.replaceState({}, document.title, newUrl.toString());
@@ -58,7 +57,6 @@ export default function ProfilePage() {
         }
     }, [location.search, location.state, location.pathname, navigate]);
 
-    // Effetto per recuperare le schede di allenamento dell'utente
     useEffect(() => {
         const fetchWorkoutPlans = async () => {
             const userLogin = localStorage.getItem("userLogin");
