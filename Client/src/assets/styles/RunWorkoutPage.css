@@ -187,37 +187,124 @@
     color: var(--text-color-light);
 }
 
+.run-workout-page-container .col-4.d-flex .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    font-size: 1rem;
+}
+
+.run-workout-page-container .btn-outline-success {
+    color: #28a745;
+    border-color: #28a745;
+}
+
+.run-workout-page-container .btn-outline-success:hover {
+    background-color: #28a745;
+    color: white;
+}
+
+.run-workout-page-container .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+}
+
+.run-workout-page-container .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: white;
+}
+
+.run-workout-page-container .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.run-workout-page-container .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.progress-bar-container {
+    height: 20px;
+    background-color: var(--input-background);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-left: 0.5rem;
+    flex-grow: 1;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: var(--primary-orange);
+    transition: width 1s linear;
+    border-radius: 5px;
+}
+
+.run-workout-page-container .text-white {
+    color: var(--text-color-dark) !important;
+}
+
 @media (max-width: 768px) {
     .run-workout-page-container h1 {
         font-size: 2rem;
         margin-top: 1rem;
     }
+
     .run-workout-page-container .card-body {
         padding: 1.5rem;
     }
+
     .run-workout-page-container .card-title {
         font-size: 1.5rem;
         flex-direction: column;
         align-items: flex-start;
     }
-    .run-workout-page-container .row.align-items-center.mb-2 > .col-1 {
+
+    .run-workout-page-container .row.align-items-center.mb-2>.col-1 {
         flex: 0 0 100%;
         max-width: 100%;
         margin-bottom: 0.5rem;
         text-align: left;
     }
-    .run-workout-page-container .row.align-items-center.mb-2 > .col-4 {
+
+    .run-workout-page-container .row.align-items-center.mb-2>.col-4 {
         flex: 0 0 50%;
         max-width: 50%;
     }
-    .run-workout-page-container .row.align-items-center.mb-2 > .col-3 {
+
+    .run-workout-page-container .row.align-items-center.mb-2>.col-3 {
         flex: 0 0 100%;
         max-width: 100%;
         margin-top: 0.75rem;
     }
+
     .run-workout-page-container .btn-outline-danger,
     .run-workout-page-container .btn-outline-info {
         width: 100%;
+    }
+
+    .run-workout-page-container .col-4.d-flex {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .run-workout-page-container .col-4.d-flex .btn {
+        margin-bottom: 0.5rem;
+    }
+
+    .run-workout-page-container .col-4.d-flex .me-2.text-white {
+        flex-basis: 100%;
+        text-align: left;
+        margin-left: 0;
+    }
+
+    .progress-bar-container {
+        margin-top: 0.5rem;
+        margin-left: 0;
+        flex-basis: 100%;
     }
 }
 
