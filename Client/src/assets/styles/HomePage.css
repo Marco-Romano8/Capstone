@@ -207,15 +207,18 @@
     width: 100%;
     max-width: 400px;
     margin-bottom: 4rem;
+    overflow: hidden;
 }
 
 .home-stats-carousel .carousel-inner {
     padding-bottom: 1rem;
+    overflow: visible;
 }
 
 .home-stats-carousel .carousel-item {
     display: flex;
     justify-content: center;
+    transition: transform 0.6s ease-in-out;
 }
 
 .home-stats-carousel .carousel-control-prev,
@@ -226,6 +229,8 @@
     top: 50%;
     transform: translateY(-50%);
     bottom: auto;
+    position: absolute;
+    z-index: 10;
 }
 
 .home-stats-carousel .carousel-control-prev-icon,
@@ -300,7 +305,7 @@
     }
 
     .home-stat-card {
-        width: 90%;
+        width: 90%; /* Aumenta la larghezza per mobile */
         margin: 0 auto;
         padding: 1.2rem;
     }
