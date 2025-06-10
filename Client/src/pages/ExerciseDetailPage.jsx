@@ -14,7 +14,6 @@ export default function ExerciseDetailPage() {
     useEffect(() => {
         const fetchExercise = async () => {
             try {
-                // Fai la richiesta GET al tuo backend usando l'ID
                 const response = await axios.get(`https://capstone-skmb.onrender.com/api/exercises/${id}`);
                 setExercise(response.data);
                 setLoading(false);
@@ -30,8 +29,7 @@ export default function ExerciseDetailPage() {
                 setLoading(false);
             }
         };
-
-        if (id) { // Esegue il fetch solo se l'ID è presente nell'URL
+        if (id) {
             fetchExercise();
         } else {
             setError("ID esercizio non fornito nell'URL.");
@@ -41,37 +39,29 @@ export default function ExerciseDetailPage() {
 
     if (loading) {
         return (
-            <Container className="text-center mt-5">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Caricamento dettagli esercizio...</span>
-                </Spinner>
+            <Container className="text-center mt-5 exercise-detail-page-container">
+                <Spinner animation="border" role="status"><span className="visually-hidden">Caricamento dettagli esercizio...</span></Spinner>
                 <p className="mt-3">Caricamento dettagli esercizio...</p>
             </Container>
         );
     }
-
     if (error) {
         return (
-            <Container className="mt-5">
+            <Container className="mt-5 exercise-detail-page-container">
                 <Alert variant="danger" className="text-center">
                     <Alert.Heading>Errore nel caricamento!</Alert.Heading>
                     <p>{error}</p>
-                    <Button variant="outline-danger" onClick={() => navigate('/workouts')} className="mt-3">
-                        Torna alla Libreria Esercizi
-                    </Button>
+                    <Button variant="outline-danger" onClick={() => navigate('/workouts')} className="mt-3">Torna alla Libreria Esercizi</Button>
                 </Alert>
             </Container>
         );
     }
-
     if (!exercise) {
         return (
-            <Container className="mt-5">
+            <Container className="mt-5 exercise-detail-page-container">
                 <Alert variant="warning" className="text-center">
                     Esercizio non trovato.
-                    <Button variant="outline-warning" onClick={() => navigate('/workouts')} className="mt-3">
-                        Torna alla Libreria Esercizi
-                    </Button>
+                    <Button variant="outline-warning" onClick={() => navigate('/workouts')} className="mt-3">Torna alla Libreria Esercizi</Button>
                 </Alert>
             </Container>
         );
@@ -85,7 +75,7 @@ export default function ExerciseDetailPage() {
                     <div className="d-flex flex-column flex-md-row align-items-center">
                         <div className="flex-shrink-0 me-md-4 mb-4 mb-md-0" style={{ maxWidth: '400px', width: '100%' }}>
                             <img
-                                src={exercise.imageUrl}
+                                src={exercise.imageUrl || 'https://via.placeholder.com/400x300?text=Immagine+non+disponibile'}
                                 alt={exercise.name}
                                 className="img-fluid rounded shadow-sm exercise-detail-img"
                                 style={{ maxHeight: '400px', objectFit: 'contain', width: '100%' }}
@@ -101,9 +91,7 @@ export default function ExerciseDetailPage() {
                             <Card.Text className="lead mb-3 exercise-detail-text">
                                 <strong>Difficoltà:</strong> {exercise.difficulty}
                             </Card.Text>
-                            <Card.Text className="lead mb-3 exercise-detail-text">
-                                <strong>Descrizione:</strong> {exercise.description}
-                            </Card.Text>
+                            <h5 className="description-title">Descrizione:</h5>
                             <Card.Text className="mb-4 exercise-description">
                                 <small className="text-muted">
                                     {exercise.description}
