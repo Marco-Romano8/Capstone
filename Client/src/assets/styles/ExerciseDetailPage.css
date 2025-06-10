@@ -29,17 +29,15 @@
     margin-bottom: 0.75rem;
     line-height: 1.6;
 }
-.description-title .normal-text {
+.normal-text {
     color: var(--text-color-dark);
     font-weight: normal;
     font-size: 1.15rem;
     margin-left: 0.5rem;
 }
-.exercise-description {
-    color: var(--text-color-dark);
-    font-size: 1rem;
-    line-height: 1.7;
-    margin-bottom: 2rem;
+.exercise-description.normal-text {
+    margin-left: 0;
+    margin-top: 0.5rem;
 }
 .back-button {
     background-color: var(--primary-orange);
@@ -80,9 +78,12 @@
     .description-title {
         text-align: center;
     }
-    .description-title .normal-text {
+    .normal-text {
         display: block;
         margin-left: 0;
         margin-top: 0.2rem;
+    }
+    .exercise-description.normal-text {
+        margin-top: 0.5rem;
     }
 }

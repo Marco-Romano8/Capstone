@@ -86,10 +86,8 @@ export default function ExerciseDetailPage() {
                             <h5 className="description-title">Equipaggiamento: <span className="normal-text">{exercise.equipment}</span></h5>
                             <h5 className="description-title">Difficoltà: <span className="normal-text">{exercise.difficulty}</span></h5>
                             <h5 className="description-title">Descrizione:</h5>
-                            <Card.Text className="mb-4 exercise-description">
-                                <small className="text-muted">
-                                    {exercise.description}
-                                </small>
+                            <Card.Text className="mb-4 exercise-description normal-text">
+                                {exercise.description}
                             </Card.Text>
                             <Button variant="secondary" onClick={() => navigate(-1)} className="back-button">
                                 Torna alla Libreria Esercizi
