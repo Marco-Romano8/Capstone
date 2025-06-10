@@ -10,11 +10,18 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 576);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
+    const [isSmallScreenCarousel, setIsSmallScreenCarousel] = useState(window.innerWidth < 576);
+    const [index, setIndex] = useState(0);
+
+    const handleSelect = (selectedIndex, e) => {
+        setIndex(selectedIndex);
+    };
 
     useEffect(() => {
         const handleResize = () => {
-            setIsSmallScreen(window.innerWidth < 576);
+            setIsMobileView(window.innerWidth <= 768);
+            setIsSmallScreenCarousel(window.innerWidth < 576);
         };
 
         window.addEventListener('resize', handleResize);
@@ -95,9 +102,9 @@ export default function HomePage() {
                             Attenzione: {error}
                         </Alert>
                     )}
-                    {isSmallScreen ? (
+                    {isSmallScreenCarousel ? (
                         <div className="home-stats-carousel-wrapper">
-                            <Carousel interval={null} controls={true} indicators={false} className="home-stats-carousel">
+                            <Carousel activeIndex={index} onSelect={handleSelect} interval={null} controls={true} indicators={false} className="home-stats-carousel">
                                 <Carousel.Item>
                                     <Card className="home-stat-card">
                                         <Card.Body className="text-center">
