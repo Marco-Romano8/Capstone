@@ -128,7 +128,7 @@ export default function RunWorkoutPage() {
         const exerciseInPlan = workoutPlan.exercises.find(ex => ex.exercise._id === exerciseId);
         const defaultReps = exerciseInPlan ? exerciseInPlan.reps.toString() : '';
         const defaultWeight = exerciseInPlan && exerciseInPlan.kg !== undefined ? exerciseInPlan.kg.toString() : '';
-        const defaultRestTime = exerciseInPlan ? exerciseInPlan.restTimeSeconds || 0 : 0; 
+        const defaultRestTime = exerciseInPlan ? exerciseInPlan.restTimeSeconds || 0 : 0;
         setCurrentLogs(prevLogs => ({
             ...prevLogs,
             [exerciseId]: [...prevLogs[exerciseId], {
@@ -222,17 +222,29 @@ export default function RunWorkoutPage() {
                                     const initialRestTime = workoutPlan.exercises.find(e => e.exercise._id === ex.exercise._id)?.restTimeSeconds || 0;
                                     const progressBarWidth = initialRestTime > 0 ? (set.restTimeRemaining / initialRestTime) * 100 : 0;
                                     return (
-                                        <Row key={`${ex.exercise._id}-${set.setNumber}`} className="align-items-center mb-2">
-                                            <Col xs={1}>Set {set.setNumber}</Col>
-                                            <Col xs={3}>
-                                                <Form.Control type="number" placeholder="Reps" value={set.reps}
-                                                    onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)} />
+                                        <Row key={`${ex.exercise._id}-${set.setNumber}`} className="align-items-center mb-2 g-2">
+                                            <Col xs={12} sm={2}>
+                                                <strong>Set {set.setNumber}</strong>
                                             </Col>
-                                            <Col xs={3}>
-                                                <Form.Control type="number" step="0.5" placeholder="Peso (kg)" value={set.weight}
-                                                    onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'weight', e.target.value)} />
+                                            <Col xs={12} sm={3}>
+                                                <Form.Group className="mb-0 d-flex align-items-center">
+                                                    <Form.Label className="me-2 mb-0 fw-bold">Rip.:</Form.Label>
+                                                    <Form.Control type="number" placeholder="Reps" value={set.reps}
+                                                        onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'reps', e.target.value)} />
+                                                </Form.Group>
                                             </Col>
-                                            <Col xs={4} className="d-flex align-items-center">
+                                            <Col xs={12} sm={3}>
+                                                <Form.Group className="mb-0 d-flex align-items-center">
+                                                    <Form.Label className="me-2 mb-0 fw-bold">Kg:</Form.Label>
+                                                    <Form.Control type="number" step="0.5" placeholder="Peso (kg)" value={set.weight}
+                                                        onChange={(e) => handleLogChange(ex.exercise._id, set.setNumber, 'weight', e.target.value)} />
+                                                </Form.Group>
+                                            </Col>
+                                            <Col xs={12} sm={4} className="d-flex align-items-center justify-content-end justify-content-sm-start mt-2 mt-sm-0">
+                                                <Form.Group className="mb-0 d-flex align-items-center me-2">
+                                                    <Form.Label className="me-2 mb-0 fw-bold text-nowrap">Recupero (sec):</Form.Label>
+                                                    <span className="me-2 text-white">{formatTime(set.restTimeRemaining)}</span>
+                                                </Form.Group>
                                                 {!set.isTimerActive && set.restTimeRemaining > 0 && (
                                                     <Button variant="outline-success" size="sm" onClick={() => startTimer(ex.exercise._id, set.setNumber)} className="me-1"><FaPlay /></Button>
                                                 )}
@@ -242,12 +254,11 @@ export default function RunWorkoutPage() {
                                                 {(set.restTimeRemaining !== initialRestTime || set.restTimeRemaining === 0) && initialRestTime > 0 && (
                                                     <Button variant="outline-secondary" size="sm" onClick={() => resetTimer(ex.exercise._id, set.setNumber, initialRestTime)} className="me-2"><FaRedo /></Button>
                                                 )}
-                                                <span className="me-2 text-white">{formatTime(set.restTimeRemaining)}</span>
-                                                <div className="progress-bar-container flex-grow-1" style={{ height: '20px', backgroundColor: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}>
+                                                <div className="progress-bar-container flex-grow-1 d-none d-sm-block" style={{ height: '20px', backgroundColor: '#e0e0e0', borderRadius: '5px', overflow: 'hidden' }}>
                                                     <div className="progress-bar-fill" style={{ width: `${progressBarWidth}%`, height: '100%', backgroundColor: '#4CAF50', transition: set.isTimerActive ? 'width 1s linear' : 'none', borderRadius: '5px' }}></div>
                                                 </div>
                                             </Col>
-                                            <Col xs={1}>
+                                            <Col xs={12} className="text-end mt-2">
                                                 <Button variant="outline-danger" size="sm" onClick={() => handleRemoveSet(ex.exercise._id, set.setNumber)}>Rimuovi Set</Button>
                                             </Col>
                                         </Row>
