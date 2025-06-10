@@ -101,6 +101,9 @@ export default function ExerciseDetailPage() {
                             <Card.Text className="lead mb-3 exercise-detail-text">
                                 <strong>Difficoltà:</strong> {exercise.difficulty}
                             </Card.Text>
+                            <Card.Text className="lead mb-3 exercise-detail-text">
+                                <strong>Descrizione:</strong> {exercise.description}
+                            </Card.Text>
                             <Card.Text className="mb-4 exercise-description">
                                 <small className="text-muted">
                                     {exercise.description}
