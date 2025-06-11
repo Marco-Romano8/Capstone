@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, FormControl, ListGroup, Spinner, Alert, Row, Col, Card, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Modal, Button, Form, FormControl, ListGroup, Spinner, Alert, Row, Col, Card, Dropdown } from 'react-bootstrap';
 import axios from 'axios';
 import '../assets/styles/AddExerciseToPlanModal.css';
 
@@ -27,8 +27,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                     headers: { Authorization: `Bearer ${userLogin}` }
                 });
                 setAllExercises(response.data);
-                const muscles = [...new Set(response.data.map(ex => ex.targetMuscle))];
-                setUniqueMuscles(['Tutti', ...muscles].sort());
+                setUniqueMuscles(['Tutti', ...new Set(response.data.map(ex => ex.targetMuscle))].sort());
                 setLoading(false);
             } catch (err) {
                 console.error('Errore nel recupero di tutti gli esercizi:', err);
@@ -40,46 +39,33 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
         if (show) {
             fetchAllExercises();
             setSelectedExercise(null);
-            setSets('');
-            setReps('');
-            setKg('');
-            setRestTimeSeconds('');
-            setSearchTerm('');
-            setFilterMuscle('');
+            setSets(''); setReps(''); setKg(''); setRestTimeSeconds('');
+            setSearchTerm(''); setFilterMuscle('');
         }
     }, [show]);
 
     useEffect(() => {
         const lowercasedSearchTerm = searchTerm.toLowerCase();
-        const newFiltered = allExercises.filter(exercise => {
+        setFilteredExercises(allExercises.filter(exercise => {
             const matchesSearchTerm = exercise.name.toLowerCase().includes(lowercasedSearchTerm);
             const matchesMuscleFilter = filterMuscle === '' || filterMuscle === 'Tutti' || exercise.targetMuscle === filterMuscle;
-            const notInCurrentPlan = !currentPlanExercises.some(planExercise => planExercise && planExercise.exercise && planExercise.exercise._id === exercise._id);
+            const notInCurrentPlan = !currentPlanExercises.some(planExercise => planExercise?.exercise?._id === exercise._id);
             return matchesSearchTerm && matchesMuscleFilter && notInCurrentPlan;
-        });
-        setFilteredExercises(newFiltered);
+        }));
     }, [searchTerm, filterMuscle, allExercises, currentPlanExercises]);
 
     const handleSelectExercise = (exercise) => {
         setSelectedExercise(exercise);
-        setSets(3);
-        setReps(10);
-        setKg(0);
-        setRestTimeSeconds(60);
+        setSets(3); setReps(10); setKg(0); setRestTimeSeconds(60);
     };
 
     const handleAddSelectedExercise = () => {
-        const parsedSets = sets === '' ? NaN : parseInt(sets);
-        const parsedReps = reps === '' ? NaN : parseInt(reps);
-        const parsedKg = kg === '' ? NaN : parseFloat(kg);
-        const parsedRestTime = restTimeSeconds === '' ? NaN : parseInt(restTimeSeconds);
+        const parsedSets = parseInt(sets);
+        const parsedReps = parseInt(reps);
+        const parsedKg = parseFloat(kg);
+        const parsedRestTime = parseInt(restTimeSeconds);
 
-        if (selectedExercise &&
-            !isNaN(parsedSets) && parsedSets > 0 &&
-            !isNaN(parsedReps) && parsedReps > 0 &&
-            !isNaN(parsedKg) &&
-            !isNaN(parsedRestTime) && parsedRestTime >= 0
-        ) {
+        if (selectedExercise && parsedSets > 0 && parsedReps > 0 && !isNaN(parsedKg) && parsedRestTime >= 0) {
             onAddExercise({
                 exercise: selectedExercise,
                 sets: parsedSets,
@@ -87,17 +73,57 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 kg: parsedKg,
                 restTimeSeconds: parsedRestTime
             });
-            setSelectedExercise(null);
-            setSets('');
-            setReps('');
-            setKg('');
-            setRestTimeSeconds('');
-            setSearchTerm('');
-            setFilterMuscle('');
             handleClose();
         } else {
             alert('Seleziona un esercizio e inserisci valori validi per serie, ripetizioni (devono essere numeri interi positivi), kg (numero) e tempo di recupero (numero non negativo).');
         }
+    };
+
+    const isAddButtonDisabled = !selectedExercise ||
+        isNaN(parseInt(sets)) || parseInt(sets) <= 0 ||
+        isNaN(parseInt(reps)) || parseInt(reps) <= 0 ||
+        isNaN(parseFloat(kg)) ||
+        isNaN(parseInt(restTimeSeconds)) || parseInt(restTimeSeconds) < 0;
+
+    const renderExerciseList = () => {
+        if (loading) {
+            return (
+                <div className="text-center">
+                    <Spinner animation="border" />
+                    <p>Caricamento esercizi...</p>
+                </div>
+            );
+        }
+        if (filteredExercises.length === 0) {
+            return (
+                <Alert variant="info" className="text-center">
+                    Nessun esercizio trovato o tutti gli esercizi disponibili sono già stati aggiunti.
+                </Alert>
+            );
+        }
+        return (
+            <div className="exercise-list-container">
+                <ListGroup variant="flush">
+                    {filteredExercises.map(exercise => (
+                        <ListGroup.Item
+                            key={exercise._id}
+                            action
+                            onClick={() => handleSelectExercise(exercise)}
+                            className={selectedExercise?._id === exercise._id ? 'active' : ''}
+                        >
+                            <div className="d-flex justify-content-between align-items-center">
+                                <span className="exercise-name-text">
+                                    {exercise.name} <small className="text-muted">({exercise.targetMuscle})</small>
+                                </span>
+                                {selectedExercise?._id === exercise._id && (
+                                    <i className="bi bi-check-circle-fill"></i>
+                                )}
+                            </div>
+                        </ListGroup.Item>
+                    ))}
+                </ListGroup>
+            </div>
+        );
     };
 
     return (
@@ -119,55 +145,32 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                         </Form.Group>
                     </Col>
                     <Col xs={12} md={4}>
-                        <DropdownButton
-                            id="dropdown-filter-muscle"
-                            title={filterMuscle === '' || filterMuscle === 'Tutti' ? "Filtra per Muscolo" : `Muscolo: ${filterMuscle}`}
-                            variant="outline-secondary"
-                            className="w-100"
-                        >
-                            {uniqueMuscles.map((muscle) => (
-                                <Dropdown.Item
-                                    key={muscle}
-                                    onClick={() => setFilterMuscle(muscle)}
-                                    active={filterMuscle === muscle}
-                                >
-                                    {muscle}
-                                </Dropdown.Item>
-                            ))}
-                        </DropdownButton>
+                        <Dropdown className="w-100">
+                            <Dropdown.Toggle
+                                variant="outline-secondary"
+                                id="dropdown-filter-muscle"
+                                className="w-100 dropdown-muscle-filter-toggle"
+                            >
+                                <span className="dropdown-toggle-text">
+                                    {filterMuscle === '' || filterMuscle === 'Tutti' ? "Filtra per Muscolo" : `Muscolo: ${filterMuscle}`}
+                                </span>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu className="w-100">
+                                {uniqueMuscles.map((muscle) => (
+                                    <Dropdown.Item
+                                        key={muscle}
+                                        onClick={() => setFilterMuscle(muscle)}
+                                        active={filterMuscle === muscle}
+                                    >
+                                        {muscle}
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                        </Dropdown>
                     </Col>
                 </Row>
 
-                {loading ? (
-                    <div className="text-center">
-                        <Spinner animation="border" />
-                        <p>Caricamento esercizi...</p>
-                    </div>
-                ) : filteredExercises.length === 0 ? (
-                    <Alert variant="info" className="text-center">
-                        Nessun esercizio trovato o tutti gli esercizi disponibili sono già stati aggiunti.
-                    </Alert>
-                ) : (
-                    <div className="exercise-list-container">
-                        <ListGroup variant="flush">
-                            {filteredExercises.map(exercise => (
-                                <ListGroup.Item
-                                    key={exercise._id}
-                                    action
-                                    onClick={() => handleSelectExercise(exercise)}
-                                    className={selectedExercise && selectedExercise._id === exercise._id ? 'active' : ''}
-                                >
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <span>{exercise.name} <small className="text-muted">({exercise.targetMuscle})</small></span>
-                                        {selectedExercise && selectedExercise._id === exercise._id && (
-                                            <i className="bi bi-check-circle-fill"></i>
-                                        )}
-                                    </div>
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
-                    </div>
-                )}
+                {renderExerciseList()}
 
                 {selectedExercise && (
                     <Card className="mt-4 p-3 selected-exercise-card">
@@ -177,45 +180,20 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                             <Row className="mb-3">
                                 <Col>
                                     <Form.Label>Serie:</Form.Label>
-                                    <FormControl
-                                        type="number"
-                                        min="1"
-                                        value={sets}
-                                        onChange={(e) => setSets(e.target.value)}
-                                        required
-                                    />
+                                    <FormControl type="number" min="1" value={sets} onChange={(e) => setSets(e.target.value)} required />
                                 </Col>
                                 <Col>
                                     <Form.Label>Ripetizioni:</Form.Label>
-                                    <FormControl
-                                        type="number"
-                                        min="1"
-                                        value={reps}
-                                        onChange={(e) => setReps(e.target.value)}
-                                        required
-                                    />
+                                    <FormControl type="number" min="1" value={reps} onChange={(e) => setReps(e.target.value)} required />
                                 </Col>
                                 <Col>
                                     <Form.Label>Kg:</Form.Label>
-                                    <FormControl
-                                        type="number"
-                                        min="0"
-                                        step="0.5"
-                                        value={kg}
-                                        onChange={(e) => setKg(e.target.value)}
-                                        required
-                                    />
+                                    <FormControl type="number" min="0" step="0.5" value={kg} onChange={(e) => setKg(e.target.value)} required />
                                 </Col>
                             </Row>
                             <Form.Group className="mb-3">
                                 <Form.Label>Tempo di Recupero (secondi):</Form.Label>
-                                <FormControl
-                                    type="number"
-                                    min="0"
-                                    value={restTimeSeconds}
-                                    onChange={(e) => setRestTimeSeconds(e.target.value)}
-                                    required
-                                />
+                                <FormControl type="number" min="0" value={restTimeSeconds} onChange={(e) => setRestTimeSeconds(e.target.value)} required />
                             </Form.Group>
                         </Card.Body>
                     </Card>
@@ -225,13 +203,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 <Button variant="secondary" onClick={handleClose}>
                     Annulla
                 </Button>
-                <Button variant="primary" onClick={handleAddSelectedExercise} disabled={
-                    !selectedExercise ||
-                    sets === '' || parseInt(sets) <= 0 || isNaN(parseInt(sets)) ||
-                    reps === '' || parseInt(reps) <= 0 || isNaN(parseInt(reps)) ||
-                    kg === '' || isNaN(parseFloat(kg)) ||
-                    restTimeSeconds === '' || parseInt(restTimeSeconds) < 0 || isNaN(parseInt(restTimeSeconds))
-                }>
+                <Button variant="primary" onClick={handleAddSelectedExercise} disabled={isAddButtonDisabled}>
                     Aggiungi Esercizio alla Scheda
                 </Button>
             </Modal.Footer>

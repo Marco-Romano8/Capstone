@@ -39,7 +39,7 @@
     background-color: var(--input-background);
 }
 
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary {
+.add-exercise-modal .dropdown-muscle-filter-toggle {
     border-color: var(--input-border);
     border-radius: 8px;
     padding: 0.75rem 1rem;
@@ -51,19 +51,26 @@
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary::after {
+.add-exercise-modal .dropdown-muscle-filter-toggle .dropdown-toggle-text {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.add-exercise-modal .dropdown-muscle-filter-toggle::after {
     margin-left: 0.5em;
     flex-shrink: 0;
 }
 
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary:hover,
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary:focus,
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary:active,
-.add-exercise-modal .dropdown-toggle.btn-outline-secondary.show {
+.add-exercise-modal .dropdown-muscle-filter-toggle:hover,
+.add-exercise-modal .dropdown-muscle-filter-toggle:focus,
+.add-exercise-modal .dropdown-muscle-filter-toggle:active,
+.add-exercise-modal .dropdown-muscle-filter-toggle.show {
     background-color: var(--input-background);
     border-color: var(--primary-orange);
     box-shadow: 0 0 0 0.2rem rgba(255, 102, 0, 0.25);
@@ -103,7 +110,7 @@
     font-weight: 600;
 }
 
-.add-exercise-modal .list-group {
+.add-exercise-modal .exercise-list-container {
     max-height: 300px;
     overflow-y: auto;
     border: 1px solid var(--border-color-light);
@@ -117,6 +124,17 @@
     padding: 0.75rem 1.25rem;
     border: none;
     border-bottom: 1px solid var(--border-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-exercise-modal .list-group-item .exercise-name-text {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .add-exercise-modal .list-group-item:last-child {
@@ -124,7 +142,7 @@
 }
 
 .add-exercise-modal .list-group-item.action:hover {
-    background-color: #f0f0f0;
+    background-color: var(--list-item-hover-background, #f0f0f0);
     cursor: pointer;
 }
 
@@ -171,9 +189,9 @@
 }
 
 .add-exercise-modal .btn-secondary {
-    background-color: #6c757d;
-    border-color: #6c757d;
-    color: #fff;
+    background-color: var(--button-secondary-background, #6c757d);
+    border-color: var(--button-secondary-background, #6c757d);
+    color: var(--button-secondary-text, #fff);
     font-weight: 600;
     border-radius: 8px;
     padding: 0.6rem 1.2rem;
@@ -181,8 +199,8 @@
 }
 
 .add-exercise-modal .btn-secondary:hover {
-    background-color: #5a6268;
-    border-color: #5a6268;
+    background-color: var(--button-secondary-hover, #5a6268);
+    border-color: var(--button-secondary-hover, #5a6268);
     transform: translateY(-1px);
 }
 
@@ -207,26 +225,32 @@
     cursor: not-allowed;
 }
 
-.add-exercise-modal .list-group::-webkit-scrollbar {
+.add-exercise-modal .exercise-list-container::-webkit-scrollbar,
+.add-exercise-modal .dropdown-menu::-webkit-scrollbar {
     width: 8px;
 }
 
-.add-exercise-modal .list-group::-webkit-scrollbar-track {
+.add-exercise-modal .exercise-list-container::-webkit-scrollbar-track,
+.add-exercise-modal .dropdown-menu::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.add-exercise-modal .list-group::-webkit-scrollbar-thumb {
+.add-exercise-modal .exercise-list-container::-webkit-scrollbar-thumb,
+.add-exercise-modal .dropdown-menu::-webkit-scrollbar-thumb {
     background: var(--primary-orange);
     border-radius: 10px;
 }
 
-.add-exercise-modal .list-group::-webkit-scrollbar-thumb:hover {
+.add-exercise-modal .exercise-list-container::-webkit-scrollbar-thumb:hover,
+.add-exercise-modal .dropdown-menu::-webkit-scrollbar-thumb:hover {
     background: var(--primary-orange-hover);
 }
 
 .add-exercise-modal .bi-check-circle-fill {
     color: var(--primary-orange);
+    flex-shrink: 0;
+    margin-left: 0.5rem;
 }
 .add-exercise-modal .list-group-item.active .bi-check-circle-fill {
     color: var(--text-color-light);
