@@ -20,8 +20,23 @@ export default function UserWorkoutCalendar() {
     const [selectedPlanId, setSelectedPlanId] = useState('');
     const [editingScheduleId, setEditingScheduleId] = useState(null);
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVariant, setAlertVariant] = useState('success');
+
     const API_BASE_URL = 'https://capstone-skmb.onrender.com/api';
     const userLogin = localStorage.getItem('userLogin');
+
+    const displayAppAlert = useCallback((message, variant) => {
+        setAlertMessage(message);
+        setAlertVariant(variant);
+        setShowAlert(true);
+        const timer = setTimeout(() => {
+            setShowAlert(false);
+            setAlertMessage('');
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const fetchAvailableWorkoutPlans = useCallback(async () => {
         if (!userLogin) {
@@ -97,7 +112,7 @@ export default function UserWorkoutCalendar() {
 
     const handleSaveSchedule = async () => {
         if (!selectedDate || !selectedPlanId) {
-            alert('Seleziona una data e una scheda di allenamento valida.');
+            displayAppAlert('Seleziona una data e una scheda di allenamento valida.', 'danger');
             return;
         }
         try {
@@ -116,20 +131,20 @@ export default function UserWorkoutCalendar() {
             }
             await fetchScheduledWorkouts();
             setShowModal(false);
-            alert('Programmazione salvata con successo!');
+            displayAppAlert('Programmazione salvata con successo!', 'success');
         } catch (err) {
             console.error('Errore nel salvataggio della programmazione:', err);
             if (err.response && err.response.data && err.response.data.message) {
-                setError(`Errore nel salvataggio: ${err.response.data.message}`);
+                displayAppAlert(`Errore nel salvataggio: ${err.response.data.message}`, 'danger');
             } else {
-                setError('Errore durante il salvataggio della programmazione.');
+                displayAppAlert('Errore durante il salvataggio della programmazione.', 'danger');
             }
         }
     };
 
     const handleDeleteSchedule = async () => {
         if (!editingScheduleId) {
-            alert('Nessun allenamento selezionato da eliminare.');
+            displayAppAlert('Nessun allenamento selezionato da eliminare.', 'danger');
             return;
         }
         if (!window.confirm('Sei sicuro di voler eliminare questa programmazione?')) {
@@ -144,13 +159,13 @@ export default function UserWorkoutCalendar() {
             setEditingScheduleId(null);
             setSelectedDate(null);
             setSelectedPlanId('');
-            alert('Programmazione eliminata con successo!');
+            displayAppAlert('Programmazione eliminata con successo!', 'success');
         } catch (err) {
             console.error('Errore nell\'eliminazione della programmazione:', err);
             if (err.response && err.response.data && err.response.data.message) {
-                setError(`Errore nell'eliminazione: ${err.response.data.message}`);
+                displayAppAlert(`Errore nell'eliminazione: ${err.response.data.message}`, 'danger');
             } else {
-                setError('Errore durante l\'eliminazione della programmazione.');
+                displayAppAlert('Errore durante l\'eliminazione della programmazione.', 'danger');
             }
         }
     };
@@ -183,6 +198,11 @@ export default function UserWorkoutCalendar() {
 
     return (
         <Container className="user-calendar-container my-5">
+            {showAlert && (
+                <Alert variant={alertVariant} onClose={() => setShowAlert(false)} dismissible className="floating-alert">
+                    {alertMessage}
+                </Alert>
+            )}
             <h2 className="text-center mb-4 calendar-title">La Tua Programmazione Settimanale</h2>
             <Card className="calendar-card">
                 <Card.Body>
