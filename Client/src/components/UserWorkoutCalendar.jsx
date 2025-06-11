@@ -19,10 +19,13 @@ export default function UserWorkoutCalendar() {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedPlanId, setSelectedPlanId] = useState('');
     const [editingScheduleId, setEditingScheduleId] = useState(null);
+    const [selectedEndDateTime, setSelectedEndDateTime] = useState(null);
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertVariant, setAlertVariant] = useState('success');
+
+    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
 
     const API_BASE_URL = 'https://capstone-skmb.onrender.com/api';
     const userLogin = localStorage.getItem('userLogin');
@@ -70,6 +73,7 @@ export default function UserWorkoutCalendar() {
             const formattedSchedules = response.data.map(schedule => ({
                 id: schedule._id,
                 date: schedule.date,
+                end: moment(schedule.endDate || schedule.date).toDate(),
                 workoutPlanId: schedule.workoutPlanId._id,
                 workoutPlanName: schedule.workoutPlanId.name,
                 color: schedule.workoutPlanId.color
@@ -96,15 +100,17 @@ export default function UserWorkoutCalendar() {
         loadAllData();
     }, [fetchAvailableWorkoutPlans, fetchScheduledWorkouts]);
 
-    const handleSelectSlot = ({ start }) => {
-        setSelectedDate(moment(start).format('YYYY-MM-DD'));
+    const handleSelectSlot = ({ start, end }) => {
+        setSelectedDate(moment(start).format('YYYY-MM-DDTHH:mm'));
+        setSelectedEndDateTime(moment(end).format('YYYY-MM-DDTHH:mm'));
         setSelectedPlanId('');
         setEditingScheduleId(null);
         setShowModal(true);
     };
 
     const handleSelectEvent = (event) => {
-        setSelectedDate(moment(event.start).format('YYYY-MM-DD'));
+        setSelectedDate(moment(event.start).format('YYYY-MM-DDTHH:mm'));
+        setSelectedEndDateTime(moment(event.end).format('YYYY-MM-DDTHH:mm'));
         setSelectedPlanId(event.workoutPlanId);
         setEditingScheduleId(event.id);
         setShowModal(true);
@@ -116,16 +122,18 @@ export default function UserWorkoutCalendar() {
             return;
         }
         try {
-            const dateToSave = new Date(selectedDate);
+            const startDate = new Date(selectedDate);
+            const endDate = new Date(selectedEndDateTime || selectedDate);
+
             let response;
             if (editingScheduleId) {
                 response = await axios.put(`${API_BASE_URL}/workout-schedules/${editingScheduleId}`,
-                    { date: dateToSave, workoutPlanId: selectedPlanId },
+                    { date: startDate, workoutPlanId: selectedPlanId, endDate: endDate },
                     { headers: { Authorization: `Bearer ${userLogin}` } }
                 );
             } else {
                 response = await axios.post(`${API_BASE_URL}/workout-schedules`,
-                    { date: dateToSave, workoutPlanId: selectedPlanId },
+                    { date: startDate, workoutPlanId: selectedPlanId, endDate: endDate },
                     { headers: { Authorization: `Bearer ${userLogin}` } }
                 );
             }
@@ -135,19 +143,22 @@ export default function UserWorkoutCalendar() {
         } catch (err) {
             console.error('Errore nel salvataggio della programmazione:', err);
             if (err.response && err.response.data && err.response.data.message) {
+                setError(`Errore nel salvataggio: ${err.response.data.message}`);
                 displayAppAlert(`Errore nel salvataggio: ${err.response.data.message}`, 'danger');
             } else {
-                displayAppAlert('Errore durante il salvataggio della programmazione.', 'danger');
+                setError('Errore durante il salvataggio della programmazione.', 'danger');
             }
         }
     };
 
+    const confirmDelete = () => {
+        setShowConfirmDeleteModal(true);
+    };
+
     const handleDeleteSchedule = async () => {
+        setShowConfirmDeleteModal(false);
         if (!editingScheduleId) {
             displayAppAlert('Nessun allenamento selezionato da eliminare.', 'danger');
-            return;
-        }
-        if (!window.confirm('Sei sicuro di voler eliminare questa programmazione?')) {
             return;
         }
         try {
@@ -159,6 +170,7 @@ export default function UserWorkoutCalendar() {
             setEditingScheduleId(null);
             setSelectedDate(null);
             setSelectedPlanId('');
+            setSelectedEndDateTime(null);
             displayAppAlert('Programmazione eliminata con successo!', 'success');
         } catch (err) {
             console.error('Errore nell\'eliminazione della programmazione:', err);
@@ -174,7 +186,7 @@ export default function UserWorkoutCalendar() {
         id: sw.id,
         title: sw.workoutPlanName,
         start: new Date(sw.date),
-        end: new Date(sw.date),
+        end: new Date(sw.end || sw.date),
         workoutPlanId: sw.workoutPlanId,
         color: sw.color
     }));
@@ -217,6 +229,8 @@ export default function UserWorkoutCalendar() {
                         onSelectEvent={handleSelectEvent}
                         defaultView="week"
                         views={['month', 'week', 'day', 'agenda']}
+                        step={30}
+                        timeslots={2}
                         messages={{
                             next: 'Prossimo',
                             previous: 'Precedente',
@@ -239,7 +253,10 @@ export default function UserWorkoutCalendar() {
             <Modal show={showModal} onHide={() => setShowModal(false)} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {editingScheduleId ? 'Modifica Programmazione' : 'Aggiungi Programmazione'} per il {selectedDate ? moment(selectedDate).format('DD/MM/YYYY') : ''}
+                        {editingScheduleId ? 'Modifica Programmazione' : 'Aggiungi Programmazione'}
+                        <br />
+                        {selectedDate && moment(selectedDate).format('DD/MM/YYYY HH:mm')}
+                        {selectedEndDateTime && selectedDate !== selectedEndDateTime && ` - ${moment(selectedEndDateTime).format('HH:mm')}`}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -262,12 +279,29 @@ export default function UserWorkoutCalendar() {
                         Annulla
                     </Button>
                     {editingScheduleId && (
-                        <Button variant="danger" onClick={handleDeleteSchedule} className="me-auto">
+                        <Button variant="danger" onClick={confirmDelete} className="me-auto">
                             Rimuovi Allenamento
                         </Button>
                     )}
                     <Button variant="primary" onClick={handleSaveSchedule} disabled={!selectedPlanId}>
                         {editingScheduleId ? 'Aggiorna Programmazione' : 'Aggiungi Programmazione'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showConfirmDeleteModal} onHide={() => setShowConfirmDeleteModal(false)} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Conferma Eliminazione</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Sei sicuro di voler eliminare questa programmazione?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowConfirmDeleteModal(false)}>
+                        Annulla
+                    </Button>
+                    <Button variant="danger" onClick={handleDeleteSchedule}>
+                        Elimina
                     </Button>
                 </Modal.Footer>
             </Modal>

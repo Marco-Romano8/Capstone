@@ -8,8 +8,11 @@ const workoutScheduleSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true,
-        unique: true
+        required: true
+    },
+    endDate: {
+        type: Date,
+        required: false
     },
     workoutPlanId: {
         type: mongoose.Schema.Types.ObjectId,

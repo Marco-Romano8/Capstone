@@ -3,16 +3,16 @@ const WorkoutPlan = require('../models/workoutPlan');
 
 exports.createWorkoutSchedule = async (req, res) => {
     try {
-        const { date, workoutPlanId } = req.body;
+        const { date, endDate, workoutPlanId } = req.body;
         const userId = req.user._id;
 
         if (!date || !workoutPlanId) {
-            return res.status(400).json({ message: 'Data e ID della scheda di allenamento sono richiesti.' });
+            return res.status(400).json({ message: 'Data di inizio e ID della scheda di allenamento sono richiesti.' });
         }
 
         const existingSchedule = await WorkoutSchedule.findOne({ userId, date: new Date(date) });
         if (existingSchedule) {
-            return res.status(409).json({ message: 'Un allenamento è già programmato per questa data.' });
+            return res.status(409).json({ message: 'Un allenamento è già programmato per questa data di inizio.' });
         }
 
         const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
@@ -23,6 +23,7 @@ exports.createWorkoutSchedule = async (req, res) => {
         const newWorkoutSchedule = new WorkoutSchedule({
             userId,
             date: new Date(date),
+            endDate: endDate ? new Date(endDate) : undefined,
             workoutPlanId,
             workoutPlanName: workoutPlan.name
         });
@@ -71,10 +72,10 @@ exports.updateWorkoutSchedule = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user._id;
-        const { date, workoutPlanId } = req.body;
+        const { date, endDate, workoutPlanId } = req.body;
 
         if (!date || !workoutPlanId) {
-            return res.status(400).json({ message: 'Data e ID della scheda di allenamento sono richiesti.' });
+            return res.status(400).json({ message: 'Data di inizio e ID della scheda di allenamento sono richiesti.' });
         }
 
         const workoutPlan = await WorkoutPlan.findById(workoutPlanId);
@@ -84,7 +85,12 @@ exports.updateWorkoutSchedule = async (req, res) => {
 
         const updatedSchedule = await WorkoutSchedule.findOneAndUpdate(
             { _id: id, userId },
-            { date: new Date(date), workoutPlanId, workoutPlanName: workoutPlan.name },
+            { 
+                date: new Date(date),
+                endDate: endDate ? new Date(endDate) : undefined,
+                workoutPlanId, 
+                workoutPlanName: workoutPlan.name 
+            },
             { new: true, runValidators: true }
         );
 
@@ -104,9 +110,9 @@ exports.deleteWorkoutSchedule = async (req, res) => {
         const { id } = req.params;
         const userId = req.user._id;
 
-        const deletedSchedule = await WorkoutSchedule.findOneAndDelete({ _id: id, userId });
+        const deletedWorkoutSchedule = await WorkoutSchedule.findOneAndDelete({ _id: id, userId });
 
-        if (!deletedSchedule) {
+        if (!deletedWorkoutSchedule) {
             return res.status(404).json({ message: 'Programmazione allenamento non trovata o non autorizzato.' });
         }
 
