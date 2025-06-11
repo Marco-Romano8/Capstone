@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Container, Card, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/it';
@@ -18,30 +18,26 @@ export default function UserWorkoutCalendar() {
     const [showModal, setShowModal] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedPlanId, setSelectedPlanId] = useState('');
-    const [currentViewDate, setCurrentViewDate] = useState(new Date()); 
 
     useEffect(() => {
-        const fetchAvailablePlans = async () => {
-            const userLogin = localStorage.getItem('userLogin');
-            if (!userLogin) {
-                setError("Utente non autenticato. Impossibile caricare le schede.");
-                setLoading(false);
-                return;
-            }
-            try {
-                const response = await axios.get('https://capstone-skmb.onrender.com/api/workout-plans', {
-                    headers: { Authorization: `Bearer ${userLogin}` }
-                });
-                setAvailablePlans(response.data);
-            } catch (err) {
-                console.error("Errore nel recupero delle schede di allenamento:", err);
-                setError("Impossibile caricare le tue schede di allenamento.");
-            } finally {
-                setLoading(false);
-            }
-        };
+        const userLogin = localStorage.getItem('userLogin');
+        if (!userLogin) {
+            setError("Utente non autenticato. Impossibile caricare le schede.");
+            setLoading(false);
+            return;
+        }
 
-        fetchAvailablePlans();
+        const mockAvailablePlans = [
+            { _id: 'mock_plan_1', name: 'Scheda Forza Base', color: '#007bff' },
+            { _id: 'mock_plan_2', name: 'Scheda Ipertrofia', color: '#28a745' },
+            { _id: 'mock_plan_3', name: 'Scheda Resistenza', color: '#ffc107' },
+            { _id: 'mock_plan_4', name: 'Scheda Full Body', color: '#dc3545' },
+            { _id: 'mock_plan_5', name: 'Scheda Yoga', color: '#17a2b8' },
+        ];
+        
+        setAvailablePlans(mockAvailablePlans);
+        setLoading(false);
+        setError(null);
     }, []);
 
     useEffect(() => {
@@ -56,9 +52,9 @@ export default function UserWorkoutCalendar() {
             try {
                 await new Promise(resolve => setTimeout(resolve, 500)); 
                 const mockScheduledWorkouts = [
-                    { id: 'sch1', date: moment().day(1).format('YYYY-MM-DD'), planId: '65c92c556f8f533a68b1a37c', planName: 'Scheda A' },
-                    { id: 'sch2', date: moment().day(3).format('YYYY-MM-DD'), planId: '65c92c556f8f533a68b1a37d', planName: 'Scheda B' },
-                    { id: 'sch3', date: moment().day(5).format('YYYY-MM-DD'), planId: '65c92c556f8f533a68b1a37c', planName: 'Scheda A' },
+                    { id: 'sch1', date: moment().day(1).format('YYYY-MM-DD'), planId: 'mock_plan_1', planName: 'Scheda Forza Base' },
+                    { id: 'sch2', date: moment().day(3).format('YYYY-MM-DD'), planId: 'mock_plan_2', planName: 'Scheda Ipertrofia' },
+                    { id: 'sch3', date: moment().day(5).format('YYYY-MM-DD'), planId: 'mock_plan_2', planName: 'Scheda Ipertrofia' },
                 ];
                 setScheduledWorkouts(mockScheduledWorkouts);
             } catch (err) {
@@ -69,7 +65,9 @@ export default function UserWorkoutCalendar() {
             }
         };
 
-        fetchScheduledWorkouts();
+        if (availablePlans.length > 0) { 
+            fetchScheduledWorkouts();
+        }
     }, [availablePlans]);
 
     const handleSelectSlot = ({ start }) => {
@@ -88,9 +86,10 @@ export default function UserWorkoutCalendar() {
         if (selectedDate && selectedPlanId) {
             const plan = availablePlans.find(p => p._id === selectedPlanId);
             if (!plan) {
-                alert("Scheda selezionata non trovata.");
+                alert("Scheda selezionata non trovata. Riprova o ricarica la pagina.");
                 return;
             }
+
             console.log(`Salvataggio programmazione per ${selectedDate}: ${plan.name} (${selectedPlanId})`);
 
             setScheduledWorkouts(prev => {
@@ -106,7 +105,7 @@ export default function UserWorkoutCalendar() {
             });
             setShowModal(false);
         } else {
-            alert("Seleziona una data e una scheda di allenamento.");
+            alert('Seleziona una data e una scheda di allenamento valida.');
         }
     };
 
@@ -173,7 +172,8 @@ export default function UserWorkoutCalendar() {
                             noEventsInRange: 'Nessun allenamento in questo periodo.',
                         }}
                         eventPropGetter={(event) => {
-                            const backgroundColor = availablePlans.find(p => p._id === event.planId)?.color || '#ff8c00';
+                            const plan = availablePlans.find(p => p._id === event.planId);
+                            const backgroundColor = plan ? plan.color : '#ff8c00';
                             return { style: { backgroundColor } };
                         }}
                     />
@@ -203,7 +203,7 @@ export default function UserWorkoutCalendar() {
                     <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Annulla
                     </Button>
-                    {selectedPlanId && (
+                    {scheduledWorkouts.some(sw => sw.date === selectedDate && sw.planId === selectedPlanId) && (
                         <Button variant="danger" onClick={handleDeleteSchedule} className="me-auto">
                             Rimuovi Allenamento
                         </Button>
