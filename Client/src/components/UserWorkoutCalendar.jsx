@@ -20,14 +20,10 @@ export default function UserWorkoutCalendar() {
     const [selectedPlanId, setSelectedPlanId] = useState('');
     const [editingScheduleId, setEditingScheduleId] = useState(null);
     const [selectedEndDateTime, setSelectedEndDateTime] = useState(null);
-
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertVariant, setAlertVariant] = useState('success');
-
     const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
-
-    const API_BASE_URL = 'https://capstone-skmb.onrender.com/api';
     const userLogin = localStorage.getItem('userLogin');
 
     const displayAppAlert = useCallback((message, variant) => {
@@ -47,7 +43,7 @@ export default function UserWorkoutCalendar() {
             return [];
         }
         try {
-            const response = await axios.get(`${API_BASE_URL}/workoutplans`, {
+            const response = await axios.get(`https://capstone-skmb.onrender.com/api/workoutplans`, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
             setAvailablePlans(response.data);
@@ -59,7 +55,7 @@ export default function UserWorkoutCalendar() {
             setAvailablePlans([]);
             return [];
         }
-    }, [userLogin, API_BASE_URL]);
+    }, [userLogin]);
 
     const fetchScheduledWorkouts = useCallback(async () => {
         if (!userLogin) {
@@ -67,7 +63,7 @@ export default function UserWorkoutCalendar() {
             return;
         }
         try {
-            const response = await axios.get(`${API_BASE_URL}/workout-schedules`, {
+            const response = await axios.get(`https://capstone-skmb.onrender.com/api/workout-schedules`, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
             const formattedSchedules = response.data.map(schedule => ({
@@ -85,7 +81,7 @@ export default function UserWorkoutCalendar() {
             setError("Impossibile caricare la tua programmazione allenamenti.");
             setScheduledWorkouts([]);
         }
-    }, [userLogin, API_BASE_URL]);
+    }, [userLogin]);
 
     useEffect(() => {
         const loadAllData = async () => {
@@ -127,12 +123,12 @@ export default function UserWorkoutCalendar() {
 
             let response;
             if (editingScheduleId) {
-                response = await axios.put(`${API_BASE_URL}/workout-schedules/${editingScheduleId}`,
+                response = await axios.put(`https://capstone-skmb.onrender.com/api/workout-schedules/${editingScheduleId}`,
                     { date: startDate, workoutPlanId: selectedPlanId, endDate: endDate },
                     { headers: { Authorization: `Bearer ${userLogin}` } }
                 );
             } else {
-                response = await axios.post(`${API_BASE_URL}/workout-schedules`,
+                response = await axios.post(`https://capstone-skmb.onrender.com/api/workout-schedules`,
                     { date: startDate, workoutPlanId: selectedPlanId, endDate: endDate },
                     { headers: { Authorization: `Bearer ${userLogin}` } }
                 );
@@ -162,7 +158,7 @@ export default function UserWorkoutCalendar() {
             return;
         }
         try {
-            await axios.delete(`${API_BASE_URL}/workout-schedules/${editingScheduleId}`, {
+            await axios.delete(`https://capstone-skmb.onrender.com/api/workout-schedules/${editingScheduleId}`, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
             await fetchScheduledWorkouts();
@@ -255,7 +251,7 @@ export default function UserWorkoutCalendar() {
                     <Modal.Title>
                         {editingScheduleId ? 'Modifica Programmazione' : 'Aggiungi Programmazione'}
                         <br />
-                        <span className="text-muted-custom">
+                        <span className="modal-date-time-text">
                             {selectedDate && moment(selectedDate).format('DD/MM/YYYY HH:mm')}
                             {selectedEndDateTime && selectedDate !== selectedEndDateTime && ` - ${moment(selectedEndDateTime).format('HH:mm')}`}
                         </span>
@@ -263,7 +259,7 @@ export default function UserWorkoutCalendar() {
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group controlId="selectPlan" className="mb-3">
-                        <Form.Label>Seleziona Scheda di Allenamento:</Form.Label>
+                        <Form.Label className="modal-form-label">Seleziona Scheda di Allenamento:</Form.Label>
                         <Form.Control
                             as="select"
                             value={selectedPlanId}

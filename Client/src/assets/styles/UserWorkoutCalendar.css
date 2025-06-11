@@ -110,9 +110,17 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.modal-title .text-muted-custom {
-    color: var(--text-color-dark) !important;
+/* Stili per il modale */
+.modal-date-time-text {
+    color: var(--primary-orange) !important;
+    font-size: 0.9em;
 }
+
+.modal-form-label {
+    color: var(--text-color-dark) !important;
+    font-weight: 500;
+}
+
 
 @media (max-width: 768px) {
     .user-calendar-container {
