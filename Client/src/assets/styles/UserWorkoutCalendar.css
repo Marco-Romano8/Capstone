@@ -1,0 +1,121 @@
+.user-calendar-container {
+    background-color: var(--card-background);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.calendar-title {
+    color: var(--primary-orange);
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+.calendar-card {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.rbc-calendar {
+    font-family: 'Inter', sans-serif;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rbc-header {
+    background-color: var(--primary-orange);
+    color: var(--text-color-light);
+    font-weight: 600;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.rbc-header + .rbc-header {
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rbc-date-cell {
+    padding: 0.5rem;
+    font-size: 0.9em;
+}
+
+.rbc-off-range-bg {
+    background-color: #f8f8f8;
+}
+
+.rbc-current-time-indicator {
+    background-color: var(--primary-orange-hover);
+}
+
+.rbc-event {
+    background-color: var(--primary-orange);
+    border-radius: 5px;
+    padding: 3px 5px;
+    font-size: 0.85em;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+}
+
+.rbc-event-content {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rbc-event:hover {
+    background-color: var(--primary-orange-hover);
+}
+
+.rbc-toolbar button {
+    background-color: var(--card-background);
+    color: var(--primary-orange);
+    border: 1px solid var(--primary-orange);
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin: 0 5px;
+    transition: all 0.2s ease;
+}
+
+.rbc-toolbar button:hover,
+.rbc-toolbar button.rbc-active {
+    background-color: var(--primary-orange);
+    color: var(--text-color-light);
+    border-color: var(--primary-orange);
+}
+
+.rbc-today {
+    background-color: #ffecc6; 
+}
+
+.rbc-day-bg {
+    border: 1px solid var(--border-color-light);
+}
+
+.rbc-row-segment .rbc-event-content {
+    color: var(--text-color-light);
+}
+
+@media (max-width: 768px) {
+    .user-calendar-container {
+        padding: 1rem;
+    }
+    .calendar-title {
+        font-size: 1.8rem;
+    }
+    .rbc-header {
+        font-size: 0.8em;
+        padding: 0.5rem 0.2rem;
+    }
+    .rbc-toolbar .rbc-btn-group button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8em;
+    }
+    .rbc-calendar {
+        height: 400px !important;
+    }
+}

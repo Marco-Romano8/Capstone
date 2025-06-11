@@ -3,6 +3,7 @@ import HeaderComponent from '../components/HeaderComponent';
 import { Container, Card, Button, Row, Col, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import UserWorkoutCalendar from '../components/UserWorkoutCalendar';
 import '../assets/styles/HomePage.css';
 
 export default function HomePage() {
@@ -122,6 +123,11 @@ export default function HomePage() {
                             </Card>
                         </Col>
                     </Row>
+
+                    <div className="my-5">
+                        <UserWorkoutCalendar />
+                    </div>
+
                     <div className="home-cta-section">
                         <h2 className="cta-heading">Pronto per il tuo prossimo allenamento?</h2>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-center">

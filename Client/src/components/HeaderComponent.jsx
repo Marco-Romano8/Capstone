@@ -76,7 +76,7 @@ export default function HeaderComponent() {
                                 </Nav.Link>
 
                                 <Nav.Link as={Link} to="/workout-logs" className="d-flex align-items-center me-3">
-                                    <FaChartBar className="me-1" /> Log Allenamenti
+                                    <FaChartBar className="me-1" /> Allenamenti Registrati
                                 </Nav.Link>
                             </>
                         )}
