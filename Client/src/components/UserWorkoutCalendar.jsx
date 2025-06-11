@@ -26,8 +26,7 @@ export default function UserWorkoutCalendar() {
     const fetchAvailableWorkoutPlans = useCallback(async () => {
         if (!userLogin) {
             setError("Utente non autenticato. Impossibile caricare le schede.");
-            setLoading(false);
-            return;
+            return [];
         }
         try {
             const response = await axios.get(`${API_BASE_URL}/workoutplans`, {
@@ -35,17 +34,18 @@ export default function UserWorkoutCalendar() {
             });
             setAvailablePlans(response.data);
             setError(null);
+            return response.data;
         } catch (err) {
             console.error("Errore nel recupero delle schede di allenamento disponibili:", err);
             setError("Impossibile caricare le tue schede di allenamento.");
             setAvailablePlans([]);
+            return [];
         }
     }, [userLogin, API_BASE_URL]);
 
     const fetchScheduledWorkouts = useCallback(async () => {
         if (!userLogin) {
             setError("Utente non autenticato. Impossibile caricare la programmazione.");
-            setLoading(false);
             return;
         }
         try {
@@ -65,21 +65,21 @@ export default function UserWorkoutCalendar() {
             console.error("Errore nel recupero della programmazione allenamenti:", err);
             setError("Impossibile caricare la tua programmazione allenamenti.");
             setScheduledWorkouts([]);
-        } finally {
-            setLoading(false);
         }
     }, [userLogin, API_BASE_URL]);
 
     useEffect(() => {
-        setLoading(true);
-        fetchAvailableWorkoutPlans();
-    }, [fetchAvailableWorkoutPlans]);
+        const loadAllData = async () => {
+            setLoading(true);
+            const plans = await fetchAvailableWorkoutPlans();
+            if (plans.length > 0) {
+                await fetchScheduledWorkouts();
+            }
+            setLoading(false);
+        };
 
-    useEffect(() => {
-        if (!loading && availablePlans) {
-            fetchScheduledWorkouts();
-        }
-    }, [loading, availablePlans, fetchScheduledWorkouts]);
+        loadAllData();
+    }, [fetchAvailableWorkoutPlans, fetchScheduledWorkouts]);
 
     const handleSelectSlot = ({ start }) => {
         setSelectedDate(moment(start).format('YYYY-MM-DD'));
@@ -114,7 +114,7 @@ export default function UserWorkoutCalendar() {
                     { headers: { Authorization: `Bearer ${userLogin}` } }
                 );
             }
-            fetchScheduledWorkouts();
+            await fetchScheduledWorkouts();
             setShowModal(false);
             alert('Programmazione salvata con successo!');
         } catch (err) {
@@ -139,7 +139,7 @@ export default function UserWorkoutCalendar() {
             await axios.delete(`${API_BASE_URL}/workout-schedules/${editingScheduleId}`, {
                 headers: { Authorization: `Bearer ${userLogin}` }
             });
-            fetchScheduledWorkouts();
+            await fetchScheduledWorkouts();
             setShowModal(false);
             setEditingScheduleId(null);
             setSelectedDate(null);
