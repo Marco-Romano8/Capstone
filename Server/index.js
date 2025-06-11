@@ -23,12 +23,14 @@ const userEndpoint = require('./routes/users');
 const exerciseEndpoint = require('./routes/exercises');
 const workoutPlanEndpoint = require('./routes/workoutPlans');
 const workoutLogsEndpoint = require('./routes/workoutLogs');
+const workoutScheduleEndpoint = require('./routes/workoutSchedules');
 
 app.use(authEndpoint);
 app.use('/api', userEndpoint);
 app.use('/api/exercises', exerciseEndpoint);
 app.use('/api/workoutplans', workoutPlanEndpoint);
 app.use('/api/workoutlogs', workoutLogsEndpoint);
+app.use('/api/workout-schedules', workoutScheduleEndpoint);
 
 
 
