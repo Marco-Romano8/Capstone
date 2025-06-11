@@ -255,8 +255,10 @@ export default function UserWorkoutCalendar() {
                     <Modal.Title>
                         {editingScheduleId ? 'Modifica Programmazione' : 'Aggiungi Programmazione'}
                         <br />
-                        {selectedDate && moment(selectedDate).format('DD/MM/YYYY HH:mm')}
-                        {selectedEndDateTime && selectedDate !== selectedEndDateTime && ` - ${moment(selectedEndDateTime).format('HH:mm')}`}
+                        <span className="text-muted-custom">
+                            {selectedDate && moment(selectedDate).format('DD/MM/YYYY HH:mm')}
+                            {selectedEndDateTime && selectedDate !== selectedEndDateTime && ` - ${moment(selectedEndDateTime).format('HH:mm')}`}
+                        </span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>

@@ -110,6 +110,10 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.modal-title .text-muted-custom {
+    color: var(--text-color-dark) !important;
+}
+
 @media (max-width: 768px) {
     .user-calendar-container {
         padding: 1rem;
