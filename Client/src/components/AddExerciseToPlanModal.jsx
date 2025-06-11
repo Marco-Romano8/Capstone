@@ -88,17 +88,12 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
     const renderExerciseList = () => {
         if (loading) {
             return (
-                <div className="text-center">
-                    <Spinner animation="border" />
-                    <p>Caricamento esercizi...</p>
-                </div>
+                <div className="text-center"><Spinner animation="border" /><p>Caricamento esercizi...</p></div>
             );
         }
         if (filteredExercises.length === 0) {
             return (
-                <Alert variant="info" className="text-center">
-                    Nessun esercizio trovato o tutti gli esercizi disponibili sono già stati aggiunti.
-                </Alert>
+                <Alert variant="info" className="text-center">Nessun esercizio trovato o tutti gli esercizi disponibili sono già stati aggiunti.</Alert>
             );
         }
         return (
@@ -106,12 +101,11 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 <ListGroup variant="flush">
                     {filteredExercises.map(exercise => (
                         <ListGroup.Item
-                            key={exercise._id}
-                            action
+                            key={exercise._id} action
                             onClick={() => handleSelectExercise(exercise)}
                             className={selectedExercise?._id === exercise._id ? 'active' : ''}
                         >
-                            <div className="d-flex justify-content-between align-items-center">
+                            <div className="d-flex justify-content-between align-items-center w-100">
                                 <span className="exercise-name-text">
                                     {exercise.name} <small className="text-muted">({exercise.targetMuscle})</small>
                                 </span>
@@ -128,40 +122,25 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
 
     return (
         <Modal show={show} onHide={handleClose} size="lg" centered className="add-exercise-modal">
-            <Modal.Header closeButton>
-                <Modal.Title>Aggiungi Esercizio alla Scheda</Modal.Title>
-            </Modal.Header>
+            <Modal.Header closeButton><Modal.Title>Aggiungi Esercizio alla Scheda</Modal.Title></Modal.Header>
             <Modal.Body>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Row className="mb-3">
                     <Col xs={12} md={8}>
                         <Form.Group>
-                            <FormControl
-                                type="text"
-                                placeholder="Cerca esercizio per nome..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                            <FormControl type="text" placeholder="Cerca esercizio per nome..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                         </Form.Group>
                     </Col>
                     <Col xs={12} md={4}>
                         <Dropdown className="w-100">
-                            <Dropdown.Toggle
-                                variant="outline-secondary"
-                                id="dropdown-filter-muscle"
-                                className="w-100 dropdown-muscle-filter-toggle"
-                            >
+                            <Dropdown.Toggle variant="outline-secondary" id="dropdown-filter-muscle" className="w-100 dropdown-muscle-filter-toggle">
                                 <span className="dropdown-toggle-text">
                                     {filterMuscle === '' || filterMuscle === 'Tutti' ? "Filtra per Muscolo" : `Muscolo: ${filterMuscle}`}
                                 </span>
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="w-100">
-                                {uniqueMuscles.map((muscle) => (
-                                    <Dropdown.Item
-                                        key={muscle}
-                                        onClick={() => setFilterMuscle(muscle)}
-                                        active={filterMuscle === muscle}
-                                    >
+                                {uniqueMuscles.map(muscle => (
+                                    <Dropdown.Item key={muscle} onClick={() => setFilterMuscle(muscle)} active={filterMuscle === muscle}>
                                         {muscle}
                                     </Dropdown.Item>
                                 ))}
@@ -178,18 +157,9 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                             <Card.Title>{selectedExercise.name}</Card.Title>
                             <Card.Text>Muscolo: {selectedExercise.targetMuscle}</Card.Text>
                             <Row className="mb-3">
-                                <Col>
-                                    <Form.Label>Serie:</Form.Label>
-                                    <FormControl type="number" min="1" value={sets} onChange={(e) => setSets(e.target.value)} required />
-                                </Col>
-                                <Col>
-                                    <Form.Label>Ripetizioni:</Form.Label>
-                                    <FormControl type="number" min="1" value={reps} onChange={(e) => setReps(e.target.value)} required />
-                                </Col>
-                                <Col>
-                                    <Form.Label>Kg:</Form.Label>
-                                    <FormControl type="number" min="0" step="0.5" value={kg} onChange={(e) => setKg(e.target.value)} required />
-                                </Col>
+                                <Col><Form.Label>Serie:</Form.Label><FormControl type="number" min="1" value={sets} onChange={(e) => setSets(e.target.value)} required /></Col>
+                                <Col><Form.Label>Ripetizioni:</Form.Label><FormControl type="number" min="1" value={reps} onChange={(e) => setReps(e.target.value)} required /></Col>
+                                <Col><Form.Label>Kg:</Form.Label><FormControl type="number" min="0" step="0.5" value={kg} onChange={(e) => setKg(e.target.value)} required /></Col>
                             </Row>
                             <Form.Group className="mb-3">
                                 <Form.Label>Tempo di Recupero (secondi):</Form.Label>
@@ -200,9 +170,7 @@ export default function AddExerciseToPlanModal({ show, handleClose, onAddExercis
                 )}
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Annulla
-                </Button>
+                <Button variant="secondary" onClick={handleClose}>Annulla</Button>
                 <Button variant="primary" onClick={handleAddSelectedExercise} disabled={isAddButtonDisabled}>
                     Aggiungi Esercizio alla Scheda
                 </Button>

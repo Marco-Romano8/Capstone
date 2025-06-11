@@ -127,6 +127,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    overflow: hidden;
+}
+
+.add-exercise-modal .list-group-item .d-flex {
+    width: 100%;
+    overflow: hidden;
 }
 
 .add-exercise-modal .list-group-item .exercise-name-text {
@@ -135,6 +141,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
+    min-width: 0;
 }
 
 .add-exercise-modal .list-group-item:last-child {
@@ -258,7 +265,7 @@
 
 @media (max-width: 768px) {
     .add-exercise-modal .modal-content {
-        margin: 1rem;
+        margin: 0.5rem;
     }
     .add-exercise-modal .modal-header,
     .add-exercise-modal .modal-body,
@@ -282,5 +289,9 @@
     }
     .add-exercise-modal .modal-footer .btn {
         width: 100%;
+    }
+    .add-exercise-modal .row.mb-3 > .col-12 {
+        padding-left: var(--bs-gutter-x, 0.75rem);
+        padding-right: var(--bs-gutter-x, 0.75rem);
     }
 }
